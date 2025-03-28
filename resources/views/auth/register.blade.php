@@ -3,124 +3,126 @@
 @section('main-content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="text-center mb-5">
-            </div>
-            <div class="card border-0 bg-white">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <h4 class="text-center mb-4 fw-bold">Register</h4>
+                    <div class="text-center mb-4">
+                        <img src="{{ asset('path/to/your/logo.png') }}" alt="Company Logo" class="mb-3" style="max-height: 60px;">
+                        <h4 class="fw-bold">Create Your Account</h4>
+                        <p class="text-muted">Enter your details to register</p>
+                    </div>
 
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Name</label>
-                            <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" 
-                                   name="name" value="{{ old('name') }}" required placeholder="Enter your name"
-                                   style="font-size: 0.95rem;">
-                            @error('name')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <input type="text" 
+                                       class="form-control @error('name') is-invalid @enderror" 
+                                       name="name" 
+                                       placeholder="Full Name" 
+                                       value="{{ old('name') }}" 
+                                       required>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <select class="form-select @error('jenis_kelamin') is-invalid @enderror" 
+                                        name="jenis_kelamin" 
+                                        required>
+                                    <option value="">Select Gender</option>
+                                    <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>
+                                        Male
+                                    </option>
+                                    <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>
+                                        Female
+                                    </option>
+                                </select>
+                                @error('jenis_kelamin')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <input type="text" 
+                                       class="form-control @error('no_telepon') is-invalid @enderror" 
+                                       name="no_telepon" 
+                                       placeholder="Phone Number" 
+                                       value="{{ old('no_telepon') }}" 
+                                       required>
+                                @error('no_telepon')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="date" 
+                                       class="form-control @error('tanggal_lahir') is-invalid @enderror" 
+                                       name="tanggal_lahir" 
+                                       value="{{ old('tanggal_lahir') }}" 
+                                       required>
+                                @error('tanggal_lahir')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Gender</label>
-                            <select class="form-select form-select-lg @error('jenis_kelamin') is-invalid @enderror" 
-                                    name="jenis_kelamin" required style="font-size: 0.95rem;">
-                                <option value="">Select gender</option>
-                                <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>Male</option>
-                                <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Female</option>
-                            </select>
-                            @error('jenis_kelamin')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Phone Number</label>
-                            <input type="text" class="form-control form-control-lg @error('no_telepon') is-invalid @enderror" 
-                                   name="no_telepon" value="{{ old('no_telepon') }}" required placeholder="Enter your phone number"
-                                   style="font-size: 0.95rem;">
-                            @error('no_telepon')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Address</label>
-                            <input type="text" class="form-control form-control-lg @error('alamat') is-invalid @enderror" 
-                                   name="alamat" value="{{ old('alamat') }}" required placeholder="Enter your address"
-                                   style="font-size: 0.95rem;">
-                            @error('alamat')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Date of Birth</label>
-                            <input type="date" class="form-control form-control-lg @error('tanggal_lahir') is-invalid @enderror" 
-                                   name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required
-                                   style="font-size: 0.95rem;">
-                            @error('tanggal_lahir')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Domicile</label>
-                            <input type="text" class="form-control form-control-lg @error('domisili') is-invalid @enderror" 
-                                   name="domisili" value="{{ old('domisili') }}" required placeholder="Enter your domicile"
-                                   style="font-size: 0.95rem;">
-                            @error('domisili')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Email Address</label>
-                            <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" 
-                                   name="email" value="{{ old('email') }}" required placeholder="Enter your email"
-                                   style="font-size: 0.95rem;">
+                            <input type="email" 
+                                   class="form-control @error('email') is-invalid @enderror" 
+                                   name="email" 
+                                   placeholder="Email Address" 
+                                   value="{{ old('email') }}" 
+                                   required>
                             @error('email')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label text-muted mb-1">Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" 
-                                       name="password" required placeholder="Create a password"
-                                       style="font-size: 0.95rem;">
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword(this)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <input type="password" 
+                                           class="form-control @error('password') is-invalid @enderror" 
+                                           name="password" 
+                                           placeholder="Password" 
+                                           required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </button>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                            @error('password')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <input type="password" 
+                                           class="form-control" 
+                                           name="password_confirmation" 
+                                           placeholder="Confirm Password" 
+                                           required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label text-muted mb-1">Confirm Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control form-control-lg" 
-                                       name="password_confirmation" required placeholder="Confirm your password"
-                                       style="font-size: 0.95rem;">
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword(this)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mb-3">
+                        <button type="submit" class="btn btn-primary w-100 mb-3">
                             Register
                         </button>
 
                         <div class="text-center">
-                            <a href="{{ route('login') }}" class="text-decoration-none text-muted" style="font-size: 0.9rem;">
-                                Already have an account? Login here
-                            </a>
+                            <small class="text-muted">
+                                Already have an account? 
+                                <a href="{{ route('login') }}" class="text-primary text-decoration-none">
+                                    Login
+                                </a>
+                            </small>
                         </div>
                     </form>
                 </div>
@@ -128,52 +130,62 @@
         </div>
     </div>
 </div>
+@endsection
 
 @push('styles')
 <style>
-    .form-control, .form-select {
-        border: 1.5px solid #e0e0e0;
-        transition: all 0.2s ease;
+    body {
+        background-color: #f4f6f9;
     }
-    
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .form-control, .form-select {
+        border-color: #e0e0e0;
+        padding: 0.625rem;
+        font-size: 0.95rem;
+    }
+
     .form-control:focus, .form-select:focus {
         border-color: #4B7F52;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+        box-shadow: 0 0 0 0.2rem rgba(75, 127, 82, 0.15);
     }
-    
-    .input-group .btn {
-        border: 1.5px solid #e0e0e0;
-        border-left: none;
-    }
-    
+
     .btn-primary {
         background-color: #4B7F52;
         border: none;
+        padding: 0.625rem;
         transition: all 0.2s ease;
     }
-    
+
     .btn-primary:hover {
-        background-color: #4B7F52;
-        transform: translateY(-1px);
+        background-color: #3a6341;
     }
-    
-    .invalid-feedback {
-        font-size: 0.85rem;
+
+    .input-group .btn {
+        border: 1px solid #e0e0e0;
+        border-left: none;
+    }
+
+    .toggle-password i {
+        color: #6b7280;
     }
 </style>
 @endpush
 
 @push('scripts')
 <script>
-function togglePassword(button) {
-    const input = button.previousElementSibling;
-    const type = input.type === 'password' ? 'text' : 'password';
-    input.type = type;
-    
-    const icon = button.querySelector('i');
-    icon.classList.toggle('fa-eye');
-    icon.classList.toggle('fa-eye-slash');
-}
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const input = this.previousElementSibling;
+        const icon = this.querySelector('i');
+        
+        input.type = input.type === 'password' ? 'text' : 'password';
+        icon.classList.toggle('fa-eye-slash');
+        icon.classList.toggle('fa-eye');
+    });
+});
 </script>
 @endpush
-@endsection
