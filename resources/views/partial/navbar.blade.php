@@ -20,9 +20,54 @@
             </ul>
             
             <div class="d-flex gap-2">
-                <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
-                <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
+                @auth
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
+                    <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
+                @endauth
             </div>
         </div>
     </div>
 </nav>
+
+@push('styles')
+<style>
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #4B7F52;
+    }
+    
+    .btn-link {
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-link:hover {
+        color: rgba(255, 255, 255, 0.8);
+    }
+</style>
+@endpush
