@@ -8,12 +8,10 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-// User Main Page Route
 Route::get('/home', function () {
     return view('usermain');
 })->name('home');
 
-// Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

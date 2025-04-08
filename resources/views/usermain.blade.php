@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Help Keep Our Homes Clean')</title>
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Custom styles -->
     <style>
         .hero-section {
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
@@ -23,7 +21,6 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
-        /* Bootstrap overrides */
         .btn-primary {
             background-color: #4CAF50;
             border-color: #4CAF50;
@@ -38,10 +35,8 @@
     </style>
 </head>
 <body>
-    <!-- Include the Navbar -->
     @include('partial.navbar')
 
-    <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">
             <h1 class="display-4 fw-bold mb-4">Join us in making our world cleaner,<br>one waste at a time</h1>
@@ -49,13 +44,11 @@
         </div>
     </section>
 
-    <!-- Services Section -->
     <section class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center text-success mb-5">Our Services</h2>
             
             <div class="row g-4">
-                <!-- Service 1 -->
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body text-center">
@@ -70,7 +63,6 @@
                     </div>
                 </div>
                 
-                <!-- Service 2 -->
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body text-center">
@@ -85,7 +77,6 @@
                     </div>
                 </div>
                 
-                <!-- Service 3 -->
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body text-center">
@@ -104,14 +95,12 @@
         </div>
     </section>
 
-    <!-- Content Section -->
     <section class="py-5">
         <div class="container">
             @yield('content')
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-success text-white py-5">
         <div class="container">
             <div class="row g-4">
@@ -138,7 +127,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>
