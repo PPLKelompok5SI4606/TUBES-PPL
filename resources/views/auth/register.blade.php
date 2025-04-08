@@ -82,6 +82,31 @@
                             @enderror
                         </div>
 
+HEAD
+
+                        <div class="mb-3">
+                            <textarea class="form-control @error('alamat') is-invalid @enderror" 
+                                      name="alamat" 
+                                      placeholder="Address" 
+                                      required>{{ old('alamat') }}</textarea>
+                            @error('alamat')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" 
+                                   class="form-control @error('domisili') is-invalid @enderror" 
+                                   name="domisili" 
+                                   placeholder="Domisili" 
+                                   value="{{ old('domisili') }}" 
+                                   required>
+                            @error('domisili')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+248ef5dbdf8b5f0b82108e2caabb08b5c47bf533
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="input-group">

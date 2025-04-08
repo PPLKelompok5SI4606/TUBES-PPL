@@ -46,6 +46,10 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
+HEAD
         return redirect()->route('dashboard');
+
+        return redirect()->route('home');
+248ef5dbdf8b5f0b82108e2caabb08b5c47bf533
     }
 } 
