@@ -48,3 +48,15 @@ Route::middleware('checkRole:guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
+
+// Pickup Request Routes
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('pickup')->group(function () {
+        Route::get('/', [PickupRequestController::class, 'index'])->name('pickup.index');
+        Route::get('/request', [PickupRequestController::class, 'requestPage'])->name('pickup.request-page');
+        Route::get('/create', [PickupRequestController::class, 'create'])->name('pickup.create');
+        Route::post('/', [PickupRequestController::class, 'store'])->name('pickup.store');
+        Route::get('/history', [PickupRequestController::class, 'history'])->name('pickup.history');
+        Route::get('/{pickupRequest}', [PickupRequestController::class, 'show'])->name('pickup.show');
+    });
+});
