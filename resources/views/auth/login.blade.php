@@ -13,7 +13,6 @@
                             <p class="lead">Join us in making our world cleaner, one waste at a time.</p>
                         </div>
                     </div>
-                    
                     <!-- Right side - Login Form -->
                     <div class="col-md-6">
                         <div class="card-body p-5">
