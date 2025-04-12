@@ -6,6 +6,8 @@
     <title>@yield('title', 'Help Keep Our Homes Clean')</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
         .hero-section {
@@ -32,6 +34,32 @@
         .bg-primary {
             background-color: #4CAF50 !important;
         }
+        .text-success {
+            color: #4CAF50 !important;
+        }
+        .bg-success {
+            background-color: #4CAF50 !important;
+        }
+        .border-success {
+            border-color: #4CAF50 !important;
+        }
+        .hover-opacity:hover {
+            opacity: 0.8;
+        }
+        .card {
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn-success {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        .btn-success:hover {
+            background-color: #45a049;
+            border-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -51,43 +79,94 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <svg class="text-success" style="width: 48px; height: 48px;" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                </svg>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-truck text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">Waste Pickup</h3>
                             </div>
-                            <h3 class="h5 text-success">Waste Tracking</h3>
-                            <p class="text-muted">Keep track of your waste</p>
+                            <p class="card-text">Schedule a pickup for your waste and we'll handle it professionally. Our team will collect your waste at your preferred time.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Flexible scheduling</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Professional handling</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time tracking</li>
+                            </ul>
+                            @auth
+                                <a href="{{ route('pickup.create') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-truck"></i> Request Pickup
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-person-plus"></i> Sign Up to Request
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <svg class="text-success" style="width: 48px; height: 48px;" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path>
-                                </svg>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-recycle text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">Recycling</h3>
                             </div>
-                            <h3 class="h5 text-success">Report Litter</h3>
-                            <p class="text-muted">Report any litter you see and we will clean it up for you.</p>
+                            <p class="card-text">We help you recycle your waste properly, ensuring it's processed in an environmentally friendly way.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Eco-friendly processing</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Waste segregation</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Sustainable solutions</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <svg class="text-success" style="width: 48px; height: 48px;" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
-                                </svg>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-graph-up text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">Waste Tracking</h3>
                             </div>
-                            <h3 class="h5 text-success">In Depth Information</h3>
-                            <p class="text-muted">Get information about waste pickup times, capacity of TOA & TPS and more!</p>
+                            <p class="card-text">Monitor your waste management activities and track the progress of your pickup requests in real-time.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time updates</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Detailed history</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Status notifications</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-exclamation-triangle text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">Report Litter</h3>
+                            </div>
+                            <p class="card-text">Help keep your community clean by reporting any litter you see. Our team will respond promptly.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Quick reporting</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Location tracking</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Community impact</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-info-circle text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">In-Depth Information</h3>
+                            </div>
+                            <p class="card-text">Access comprehensive information about waste management, including pickup schedules and facility capacities.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pickup schedules</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Facility capacities</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Waste guidelines</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -95,6 +174,7 @@
         </div>
     </section>
 
+    <!-- Content Section -->
     <section class="py-5">
         <div class="container">
             @yield('content')
@@ -110,7 +190,7 @@
                 </div>
                 <div class="col-md-4">
                     <h3 class="h5 mb-3">Contact</h3>
-                    <p class="mb-0">Email: info@cleanhomes.com<br>Phone: (123) 456-7890</p>
+                    <p class="mb-0">Email: info@cleansweep.com<br>Phone: (123) 456-7890</p>
                 </div>
                 <div class="col-md-4">
                     <h3 class="h5 mb-3">Follow Us</h3>

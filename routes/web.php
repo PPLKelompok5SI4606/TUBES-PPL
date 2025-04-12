@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Route;
 
 // Redirect ke /home
 Route::get('/', function () {
-    return redirect()->route('home');
-});
-
-Route::get('/home', function () {
     return view('usermain');
 })->name('home');
 
