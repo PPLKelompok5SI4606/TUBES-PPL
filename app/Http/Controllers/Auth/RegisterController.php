@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
     public function showRegistrationForm()
     {
         return view('auth.register');
@@ -47,6 +42,6 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'Registration successful! Welcome to Clean Homes.');
+        return redirect()->route('home');
     }
 } 
