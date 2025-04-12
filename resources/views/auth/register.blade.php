@@ -82,8 +82,6 @@
                             @enderror
                         </div>
 
-HEAD
-
                         <div class="mb-3">
                             <textarea class="form-control @error('alamat') is-invalid @enderror" 
                                       name="alamat" 
@@ -106,7 +104,6 @@ HEAD
                             @enderror
                         </div>
 
-248ef5dbdf8b5f0b82108e2caabb08b5c47bf533
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="input-group">

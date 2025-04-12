@@ -52,4 +52,14 @@ class User extends Authenticatable
             'tanggal_lahir' => 'date',
         ];
     }
+
+    public function pickupRequests()
+    {
+        return $this->hasMany(PickupRequest::class);
+    }
+
+    public function adminPickupRequests()
+    {
+        return $this->hasMany(PickupRequest::class, 'admin_id');
+    }
 }

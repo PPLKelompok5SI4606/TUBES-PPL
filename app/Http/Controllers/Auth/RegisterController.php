@@ -42,14 +42,11 @@ class RegisterController extends Controller
             'alamat' => $request->alamat,
             'tanggal_lahir' => $request->tanggal_lahir,
             'domisili' => $request->domisili,
+            'role' => 'citizen', // Set default role
         ]);
 
         Auth::login($user);
 
-HEAD
-        return redirect()->route('dashboard');
-
-        return redirect()->route('home');
-248ef5dbdf8b5f0b82108e2caabb08b5c47bf533
+        return redirect()->route('home')->with('success', 'Registration successful! Welcome to Clean Homes.');
     }
 } 
