@@ -7,7 +7,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <img src="{{ asset('path/to/your/logo.png') }}" alt="Company Logo" class="mb-3" style="max-height: 60px;">
+                        <i class="fas fa-recycle fa-3x text-primary mb-3 text-success"></i>
                         <h4 class="fw-bold">Create Your Account</h4>
                         <p class="text-muted">Enter your details to register</p>
                     </div>
@@ -82,7 +82,6 @@
                             @enderror
                         </div>
 
-
                         <div class="mb-3">
                             <textarea class="form-control @error('alamat') is-invalid @enderror" 
                                       name="alamat" 
@@ -104,7 +103,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="input-group">
@@ -142,7 +140,7 @@
                         <div class="text-center">
                             <small class="text-muted">
                                 Already have an account? 
-                                <a href="{{ route('login') }}" class="text-primary text-decoration-none">
+                                <a href="{{ route('login') }}" class="text-primary text-decoration-none text-success">
                                     Login
                                 </a>
                             </small>

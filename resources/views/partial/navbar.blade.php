@@ -12,6 +12,9 @@
                     <a class="nav-link" href="#">Get the App</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/articles">Articles</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#">Features</a>
                 </li>
                 <li class="nav-item">
