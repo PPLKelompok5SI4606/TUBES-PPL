@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PickupRequestController;
+use App\Http\Controllers\WasteReportController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
@@ -64,5 +65,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [PickupRequestController::class, 'store'])->name('pickup.store');
         Route::get('/history', [PickupRequestController::class, 'history'])->name('pickup.history');
         Route::get('/{pickupRequest}', [PickupRequestController::class, 'show'])->name('pickup.show');
+    });
+});
+
+// Waste Reports Routes
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('waste-reports')->group(function () {
+        Route::get('/', [WasteReportController::class, 'index'])->name('waste-reports.index');
+        Route::get('/create', [WasteReportController::class, 'create'])->name('waste-reports.create');
+        Route::post('/', [WasteReportController::class, 'store'])->name('waste-reports.store');
+        Route::get('/{wasteReport}', [WasteReportController::class, 'show'])->name('waste-reports.show');
+        Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
+        Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
+        Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
 });
