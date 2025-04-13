@@ -116,4 +116,14 @@ class ArticleController extends Controller
         $articles = Article::all()->where('status', 'published');
         return view('artikel.listArtikel', compact('articles'));
     }
+
+    public function showArticle($id)
+    {
+        try {
+            $article = Article::where('status', 'published')->findOrFail($id);
+            return view('artikel.article-detail', compact('article'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Article not found');
+        }
+    }
 }

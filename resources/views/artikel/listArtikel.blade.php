@@ -61,13 +61,22 @@
         <section id="content" class="w-full max-w-6xl mx-auto">
             <div class="grid grid-cols-3 gap-8">
                 @forelse ( $articles as $article )
-                    <button data-modal-target="detail-modal" data-modal-toggle="detail-modal" data-id="{{ $article->id }}" data-title="{{ $article->title }}" data-content="{{ $article->content }}" data-createdAt="{{ $article->created_at->format('d F Y') }}" data-image="{{ Storage::url($article->image) }}" data-publishedAt="{{ $article->created_at->format('d F Y') }}" class="detailButton flex flex-col text-start p-6 ring-gray-200 ring-3 rounded-xl gap-y-3 hover:ring-primary-green justify-between hover:cursor-pointer hover:scale-105 hover:duration-300">
+                    <div class="flex flex-col text-start p-6 ring-gray-200 ring-3 rounded-xl gap-y-3 hover:ring-primary-green justify-between hover:cursor-pointer hover:scale-105 hover:duration-300">
                         <div class="flex flex-col gap-y-4 text-start">
-                            <img src="{{ Storage::url($article->image) }}" alt="" class="w-full h-45 object-cover rounded-3xl">
+                            @if($article->image)
+                                <img src="{{ Storage::url($article->image) }}" alt="" class="w-full h-45 object-cover rounded-3xl">
+                            @endif
                             <p class="font-bold font-poppins text-black text-[20px]">{{ $article->title }}</p>
+                            <p class="font-light font-poppins text-gray-500 text-[16px] line-clamp-3">{{ $article->content }}</p>
                         </div>
-                        <p class="font-light font-poppins text-gray-500 text-[16px]">{{ $article->created_at->format('d F Y') }}</p>
-                    </button>
+                        <div class="flex justify-between items-center">
+                            <p class="font-light font-poppins text-gray-500 text-[16px]">{{ $article->created_at->format('d F Y') }}</p>
+                            <a href="{{ route('article.show', $article->id) }}" 
+                               class="text-primary-green hover:underline font-medium">
+                                Read More →
+                            </a>
+                        </div>
+                    </div>
                 @empty
                     <p>Tidak ada artikel</p>
                 @endforelse

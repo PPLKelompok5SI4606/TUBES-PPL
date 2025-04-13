@@ -154,13 +154,20 @@
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="max-w-xs">
-                                        <div class="truncate">
+                                        <div id="short-content-{{ $article->id }}">
                                             {{ Str::limit($article->content, 50) }}
+                                            <button onclick="toggleContent({{ $article->id }})" 
+                                                    class="text-primary-green hover:underline text-sm mt-1">
+                                                Read More
+                                            </button>
                                         </div>
-                                        <a href="{{ route('articles.show', ['id' => $article->id]) }}" 
-                                           class="text-primary-green hover:underline text-sm mt-1 inline-block">
-                                            Read More
-                                        </a>
+                                        <div id="full-content-{{ $article->id }}" class="hidden">
+                                            {{ $article->content }}
+                                            <button onclick="toggleContent({{ $article->id }})" 
+                                                    class="text-primary-green hover:underline text-sm mt-1">
+                                                Show Less
+                                            </button>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 capitalize">
@@ -383,18 +390,17 @@
         });
 
         function toggleContent(id) {
-            const contentContainer = document.getElementById(`content-${id}`);
+            const shortContent = document.getElementById(`short-content-${id}`);
             const fullContent = document.getElementById(`full-content-${id}`);
-            const button = contentContainer.nextElementSibling;
-
-            if (fullContent.classList.contains('hidden')) {
-                contentContainer.classList.add('hidden');
-                fullContent.classList.remove('hidden');
-                button.textContent = 'Show Less';
-            } else {
-                contentContainer.classList.remove('hidden');
+            
+            if (shortContent.classList.contains('hidden')) {
+                // Show short content
+                shortContent.classList.remove('hidden');
                 fullContent.classList.add('hidden');
-                button.textContent = 'Read More';
+            } else {
+                // Show full content
+                shortContent.classList.add('hidden');
+                fullContent.classList.remove('hidden');
             }
         }
     </script>
