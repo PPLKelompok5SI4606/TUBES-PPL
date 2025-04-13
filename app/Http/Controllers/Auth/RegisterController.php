@@ -37,7 +37,7 @@ class RegisterController extends Controller
             'alamat' => $request->alamat,
             'tanggal_lahir' => $request->tanggal_lahir,
             'domisili' => $request->domisili,
-            'role' => 'citizen', // Set default role
+            'role' => 'user', 
         ]);
 
         Auth::login($user);
