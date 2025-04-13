@@ -40,13 +40,6 @@
                 <p class="font-poppins text-white text-[10px]">Artikel</p>
             </div>
             <div class="border-b border-border-gray w-[70%]"></div>
-            <div class="flex flex-col items-center">
-                <a href="{{ route('waste-reports.index') }}" class="flex flex-col items-center">
-                    <svg class="w-5" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 8V12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 16H12.01" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    <p class="font-poppins text-white text-[10px]">Laporan Sampah</p>
-                </a>
-            </div>
-            <div class="border-b border-border-gray w-[70%]"></div>
         </div>
 
         {{-- RIGHT SIDE --}}

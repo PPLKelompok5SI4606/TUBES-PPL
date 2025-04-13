@@ -5,7 +5,6 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PickupRequestController;
-use App\Http\Controllers\WasteReportController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
@@ -66,5 +65,4 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/history', [PickupRequestController::class, 'history'])->name('pickup.history');
         Route::get('/{pickupRequest}', [PickupRequestController::class, 'show'])->name('pickup.show');
     });
-    Route::resource('waste-reports', WasteReportController::class);
 });
