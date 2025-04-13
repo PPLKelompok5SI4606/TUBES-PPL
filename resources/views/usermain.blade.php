@@ -156,7 +156,7 @@
                                 </a>
                             @else
                                 <a href="{{ route('register') }}" class="btn btn-success mt-3">
-                                    <i class="bi bi-person-plus"></i> Daftar untuk Melapor
+                                    <i class="bi bi-person-plus"></i> Sign Up to Report
                                 </a>
                             @endauth
                         </div>
