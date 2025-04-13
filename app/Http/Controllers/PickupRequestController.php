@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\PickupRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller as BaseController;
 
-class PickupRequestController extends Controller
+class PickupRequestController extends BaseController
 {
+    use \Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+    use \Illuminate\Foundation\Validation\ValidatesRequests;
+    use \Illuminate\Foundation\Bus\DispatchesJobs;
+
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['requestPage']);
     }
 
     public function index()
@@ -44,22 +48,17 @@ class PickupRequestController extends Controller
         $pickupRequest->status = 'pending';
         $pickupRequest->save();
 
-        return redirect()->route('home')
-            ->with('success', 'Permintaan pickup berhasil dibuat! Anda dapat melihat status permintaan di halaman History.');
+        return redirect()->route('pickup.show', $pickupRequest)
+            ->with('success', 'Pickup request created successfully!');
     }
 
     public function show(PickupRequest $pickupRequest)
     {
-        $this->authorize('view', $pickupRequest);
         return view('pickups.show', compact('pickupRequest'));
     }
 
     public function history()
     {
-        if (!auth()->check()) {
-            return redirect()->route('login');
-        }
-        
         $pickupRequests = auth()->user()->pickupRequests()->latest()->paginate(10);
         return view('pickups.history', compact('pickupRequests'));
     }
