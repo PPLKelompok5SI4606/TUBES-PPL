@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
-
     public function showLoginForm()
     {
         return view('auth.login');
@@ -27,7 +22,14 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            
+            $request->session()->put('previous_role', Auth::user()->role);
+            
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.home');
+            }
+            
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
@@ -42,4 +44,4 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('/');
     }
-} 
+}

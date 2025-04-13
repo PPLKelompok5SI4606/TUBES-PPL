@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -20,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'role',
         'email',
         'password',
         'jenis_kelamin',
@@ -48,8 +48,17 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
             'tanggal_lahir' => 'date',
         ];
+    }
+
+    public function pickupRequests()
+    {
+        return $this->hasMany(PickupRequest::class);
+    }
+
+    public function adminPickupRequests()
+    {
+        return $this->hasMany(PickupRequest::class, 'admin_id');
     }
 }

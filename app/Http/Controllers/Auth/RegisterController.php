@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
     public function showRegistrationForm()
     {
         return view('auth.register');
@@ -42,10 +37,11 @@ class RegisterController extends Controller
             'alamat' => $request->alamat,
             'tanggal_lahir' => $request->tanggal_lahir,
             'domisili' => $request->domisili,
+            'role' => 'user', 
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('home');
     }
 } 
