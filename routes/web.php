@@ -63,3 +63,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{pickupRequest}', [PickupRequestController::class, 'show'])->name('pickup.show');
     });
 });
+
+// Laporan Sampah
+Route::get('/laporan', function () {
+    return view('Report_sampah.LapSampah');
+});
