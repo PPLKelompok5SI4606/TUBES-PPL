@@ -21,8 +21,6 @@ Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('ar
 
 // 🔐 Hanya untuk user yang sudah login
 Route::middleware('checkRole:admin')->group(function () {
-    Route::get('/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
-
     Route::get('/admin/home', [ArticleController::class, 'index'])->name('admin.home');
 
     Route::post('/articles', [ArticleController::class, 'store']);
@@ -32,6 +30,10 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
     Route::get('/admin/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
 });
 
 Route::middleware('checkRole:user')->group(function () {

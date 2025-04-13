@@ -22,6 +22,13 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            
+            $request->session()->put('previous_role', Auth::user()->role);
+            
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.home');
+            }
+            
             return redirect()->route('home');
         }
 
