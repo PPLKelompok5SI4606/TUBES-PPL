@@ -14,6 +14,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/articles', [ArticleController::class, 'listArticles']);
+Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('article.show');
+
+
 
 // 🔐 Hanya untuk user yang sudah login
 Route::middleware('checkRole:admin')->group(function () {
