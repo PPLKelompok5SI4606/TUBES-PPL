@@ -16,7 +16,14 @@ class WasteReport extends Model
         'image_path',
         'status',
         'latitude',
-        'longitude'
+        'longitude',
+        'dispatch_date',
+        'completion_date'
+    ];
+
+    protected $casts = [
+        'dispatch_date' => 'date',
+        'completion_date' => 'date'
     ];
 
     public function user()

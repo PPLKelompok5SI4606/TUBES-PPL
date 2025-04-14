@@ -79,13 +79,63 @@ class WasteReportController extends Controller
     public function update(Request $request, WasteReport $wasteReport)
     {
         $validated = $request->validate([
-            'location' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
+            'status' => 'required|in:pending,in_progress,resolved',
+            'location' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
+            'image' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'latitude' => 'sometimes|nullable|numeric',
+            'longitude' => 'sometimes|nullable|numeric',
+            'dispatch_date' => 'nullable|date',
+            'completion_date' => 'nullable|date'
         ]);
 
+        // Handle status and dates update
+        if ($request->has('status')) {
+            $updateData = ['status' => $request->status];
+            
+            // Clear dates when status is pending
+            if ($request->status === 'pending') {
+                $updateData['dispatch_date'] = null;
+                $updateData['completion_date'] = null;
+            }
+            // Set dispatch date for in_progress if provided
+            elseif ($request->status === 'in_progress') {
+                if ($request->has('dispatch_date')) {
+                    $updateData['dispatch_date'] = $request->dispatch_date;
+                }
+                $updateData['completion_date'] = null;
+            }
+            // Set completion date for resolved if provided
+            elseif ($request->status === 'resolved') {
+                if ($request->has('completion_date')) {
+                    $updateData['completion_date'] = $request->completion_date;
+                }
+                // Keep existing dispatch_date
+            }
+            
+            $wasteReport->update($updateData);
+            return back()->with('success', 'Data berhasil diperbarui!');
+        }
+
+        // Handle only date updates without status change
+        if ($request->has('dispatch_date') || $request->has('completion_date')) {
+            $updateData = [];
+            
+            if ($request->has('dispatch_date') && $wasteReport->status !== 'pending') {
+                $updateData['dispatch_date'] = $request->dispatch_date;
+            }
+            
+            if ($request->has('completion_date') && $wasteReport->status === 'resolved') {
+                $updateData['completion_date'] = $request->completion_date;
+            }
+            
+            if (!empty($updateData)) {
+                $wasteReport->update($updateData);
+                return back()->with('success', 'Tanggal berhasil diperbarui!');
+            }
+        }
+
+        // Handle other updates (location, description, etc.)
         if ($request->hasFile('image')) {
             if ($wasteReport->image_path) {
                 Storage::disk('public')->delete($wasteReport->image_path);
@@ -124,5 +174,11 @@ class WasteReportController extends Controller
 
         return redirect()->route('waste-reports.index')
             ->with('success', 'Laporan sampah berhasil dihapus!');
+    }
+
+    public function laporan()
+    {
+        $wasteReports = WasteReport::with('user')->latest()->get();
+        return view('Report_sampah.LapSampah', compact('wasteReports'));
     }
 }
