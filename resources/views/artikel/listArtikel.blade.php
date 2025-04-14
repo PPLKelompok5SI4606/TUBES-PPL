@@ -19,11 +19,16 @@
     }
 
     .bg-primary-green {
-      background-color: #198754;
+      background-color: #4CAF50;
     }
 
     .text-primary-green {
-      color: #198754;
+      color: #4CAF50;
+    }
+    
+
+    .navbar {
+      background-color: #4CAF50 !important;
     }
 
     .article-card {
@@ -108,6 +113,7 @@
 <body>
   <!-- Navbar -->
   @include('partial.navbar')
+
   <!-- Content -->
   <div class="container py-5">
     <h1 class="text-center mb-5 fw-bold">List Artikel</h1>

@@ -25,11 +25,11 @@
     .article-header {
       position: relative;
       margin-bottom: 2rem;
-      margin-top: 5rem; /* Tambah margin top untuk navbar fixed */
+      margin-top: 5rem; 
     }
     .article-image {
       width: 100%;
-      max-height: 400px; /* Kurangi tinggi gambar */
+      max-height: 400px; 
       object-fit: cover;
       border-radius: 8px;
     }
@@ -50,74 +50,29 @@
       color: #6c757d;
     }
     .back-button {
-      color: #198754;
+      color: #1a1a1a;
       transition: all 0.3s ease;
     }
-    .back-button:hover {
-      color: #0f5132;
-    }
+
     .article-title {
       font-size: 2rem;
       line-height: 1.4;
       color: #1a1a1a;
       margin-bottom: 1.5rem;
     }
+    .navbar {
+      background-color: #4CAF50 !important;
+    }
   </style>
 </head>
 <body>
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-primary-green navbar-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">Logo</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="#">Get the App</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/articles">Articles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="#">About</a>
-          </li>
-        </ul>
-        <div class="d-flex">
-          @if (Auth::user())
-            <div class="dropdown">
-              <button class="btn text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fas fa-user-circle me-2"></i>{{ Auth::user()->name }}
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <form method="POST" action="{{ route('logout') }}" class="px-3">
-                    @csrf
-                    <button type="submit" class="btn btn-link text-decoration-none text-dark p-0">
-                      <i class="fas fa-sign-out-alt me-2"></i>Logout
-                    </button>
-                  </form>
-                </li>
-              </ul>
-            </div>
-          @else
-            <a href="{{ route('login') }}" class="btn btn-outline-light me-2">Sign In</a>
-            <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
-          @endif
-        </div>
-      </div>
-    </div>
-  </nav>
+  <!-- Include Navbar Partial -->
+  @include('partial.navbar')
 
   <!-- Content -->
   <div class="container">
     <!-- Back Button -->
-    <a href="/articles" class="back-button text-decoration-none d-inline-flex align-items-center mb-4">
+    <a href="/articles" class="back-button text-decoration-none d-inline-flex align-items-center mt-4 mb-4">
       <i class="fas fa-arrow-left me-2"></i>Back to Articles
     </a>
 
