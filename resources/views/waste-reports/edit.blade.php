@@ -54,21 +54,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-control @error('status') is-invalid @enderror" 
-                                id="status" name="status" required>
-                                <option value="pending" {{ old('status', $wasteReport->status) === 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="in_progress" {{ old('status', $wasteReport->status) === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                <option value="resolved" {{ old('status', $wasteReport->status) === 'resolved' ? 'selected' : '' }}>Resolved</option>
-                            </select>
-                            @error('status')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             <a href="{{ route('waste-reports.show', $wasteReport) }}" class="btn btn-secondary">Kembali</a>
                         </div>
