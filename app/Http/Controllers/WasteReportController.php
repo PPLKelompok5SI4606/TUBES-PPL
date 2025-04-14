@@ -82,7 +82,6 @@ class WasteReportController extends Controller
             'location' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status' => 'required|in:pending,in_progress,resolved',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);
@@ -102,6 +101,9 @@ class WasteReportController extends Controller
         if (!$request->has('longitude')) {
             $validated['longitude'] = null;
         }
+
+        // Hapus status dari data yang akan diupdate
+        unset($validated['status']);
 
         $wasteReport->update($validated);
 
