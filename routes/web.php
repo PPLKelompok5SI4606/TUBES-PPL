@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PickupRequestController;
+use App\Http\Controllers\WasteReportController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +22,6 @@ Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('ar
 
 // 🔐 Hanya untuk user yang sudah login
 Route::middleware('checkRole:admin')->group(function () {
-    Route::get('/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
-
     Route::get('/admin/home', [ArticleController::class, 'index'])->name('admin.home');
 
     Route::post('/articles', [ArticleController::class, 'store']);
@@ -31,6 +31,10 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
     Route::get('/admin/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
 });
 
 Route::middleware('checkRole:user')->group(function () {
@@ -64,7 +68,23 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+
 // Laporan Sampah
-Route::get('/laporan', function () {
+Route::get('/laporan', function ()) {
     return view('Report_sampah.LapSampah');
+});
+
+
+// Waste Reports Routes
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('waste-reports')->group(function () {
+        Route::get('/', [WasteReportController::class, 'index'])->name('waste-reports.index');
+        Route::get('/create', [WasteReportController::class, 'create'])->name('waste-reports.create');
+        Route::post('/', [WasteReportController::class, 'store'])->name('waste-reports.store');
+        Route::get('/{wasteReport}', [WasteReportController::class, 'show'])->name('waste-reports.show');
+        Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
+        Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
+        Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
+    });
+
 });

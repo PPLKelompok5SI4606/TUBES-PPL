@@ -60,6 +60,10 @@ class AdminController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('auth.admin.login');
+        
+        if (session('previous_role') === 'admin') {
+            return redirect()->route('auth.admin.login');
+        }
+        return redirect()->route('login');
     }
 }

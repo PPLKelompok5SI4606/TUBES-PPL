@@ -150,6 +150,15 @@
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Location tracking</li>
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Community impact</li>
                             </ul>
+                            @auth
+                                <a href="{{ route('waste-reports.create') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-exclamation-triangle"></i> Laporkan Sampah
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-person-plus"></i> Sign Up to Report
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
