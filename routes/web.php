@@ -6,14 +6,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PickupRequestController;
 use App\Http\Controllers\WasteReportController;
+use App\Http\Controllers\HomeController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
 
 // Redirect ke /home
-Route::get('/', function () {
-    return view('usermain');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/articles', [ArticleController::class, 'listArticles']);
 Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('article.show');
@@ -33,18 +32,9 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::get('/admin/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
-});
-
-Route::middleware('checkRole:user')->group(function () {
-    Route::post('/user/logout', [LoginController::class, 'logout'])->name('auth.user.logout');
-});
-
-Route::middleware('checkRole:pengelola')->group(function () {
-    Route::post('/pengelola/logout', [LoginController::class, 'logout'])->name('auth.pengelola.logout');
-});
-
+Route::match(['get', 'post'], '/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
+Route::match(['get', 'post'], '/user/logout', [LoginController::class, 'logout'])->name('auth.user.logout');
+Route::match(['get', 'post'], '/pengelola/logout', [LoginController::class, 'logout'])->name('auth.pengelola.logout');
 
 // 👤 Hanya untuk tamu (belum login)
 Route::middleware('checkRole:guest')->group(function () {
