@@ -23,6 +23,12 @@ class CheckRole
                     ? redirect()->route('admin.home')
                     : redirect()->route('home');
             }
+
+            else if (Auth::check()){
+                return Auth::user()->role === 'pengelola'
+                ? redirect()->route('laporan')
+                : redirect()->route('laporan');
+            }
     
             // Belum login, izinkan akses ke route guest (login/register)
             return $next($request);
