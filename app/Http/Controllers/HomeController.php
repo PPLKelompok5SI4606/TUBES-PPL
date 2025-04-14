@@ -9,15 +9,13 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        // Check if this is a logout request or post-logout redirect
         if ($request->is('logout') || $request->session()->has('just_logged_out')) {
             return view('usermain');
         }
         
-        // Handle role-based redirection
         if (Auth::check()) {
             $user = Auth::user();
-            $userRole = $user->role; // Assuming 'role' is the column name
+            $userRole = $user->role; 
             
             if ($userRole === 'admin') {
                 return redirect()->route('admin.home');
@@ -26,7 +24,6 @@ class HomeController extends Controller
             }
         }
         
-        // Default view for users and guests
         return view('usermain');
     }
 }
