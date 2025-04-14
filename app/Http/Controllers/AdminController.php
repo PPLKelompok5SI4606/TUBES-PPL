@@ -56,14 +56,16 @@ class AdminController extends Controller
         }
     }
 
-    public function logout(Request $request){
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        
-        if (session('previous_role') === 'admin') {
-            return redirect()->route('auth.admin.login');
-        }
-        return redirect()->route('login');
+    public function logout(Request $request)
+    {
+    Auth::logout();
+    
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    
+    // Add a flag in the session
+    $request->session()->flash('just_logged_out', true);
+    
+    return redirect('/');
     }
 }
