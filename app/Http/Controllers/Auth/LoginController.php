@@ -28,6 +28,9 @@ class LoginController extends Controller
             if (Auth::user()->role === 'admin') {
                 return redirect()->route('admin.home');
             }
+            else if (Auth::user()->role == 'pengelola'){
+                return redirect()->route('laporan');
+            }
             
             return redirect()->route('home');
         }
@@ -39,9 +42,13 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/');
+    Auth::logout();
+    
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    
+    $request->session()->flash('just_logged_out', true);
+    
+    return redirect('/');
     }
 }
