@@ -152,6 +152,9 @@ class WasteReportController extends Controller
             $validated['longitude'] = null;
         }
 
+        // Hapus status dari data yang akan diupdate
+        unset($validated['status']);
+
         $wasteReport->update($validated);
 
         return redirect()->route('waste-reports.index')

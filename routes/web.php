@@ -68,7 +68,6 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-
 // Laporan Sampah
 Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
 
