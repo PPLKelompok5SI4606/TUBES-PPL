@@ -68,6 +68,13 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+
+// Laporan Sampah
+Route::get('/laporan', function ()) {
+    return view('Report_sampah.LapSampah');
+});
+
+
 // Waste Reports Routes
 Route::middleware(['auth'])->group(function () {
     Route::prefix('waste-reports')->group(function () {
@@ -79,4 +86,5 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
+
 });
