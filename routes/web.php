@@ -38,8 +38,13 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('checkRole:user')->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/user/logout', [LoginController::class, 'logout'])->name('auth.user.logout');
 });
+
+Route::middleware('checkRole:pengelola')->group(function () {
+    Route::post('/pengelola/logout', [LoginController::class, 'logout'])->name('auth.pengelola.logout');
+});
+
 
 // 👤 Hanya untuk tamu (belum login)
 Route::middleware('checkRole:guest')->group(function () {
@@ -69,7 +74,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Laporan Sampah
-Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
+Route::middleware('checkRole:pengelola')->group(function () {
+    Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
+});
+
 
 
 // Waste Reports Routes

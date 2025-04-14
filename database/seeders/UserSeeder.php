@@ -33,5 +33,16 @@ class UserSeeder extends Seeder
             'tanggal_lahir' => '1995-01-01',
             'domisili' => 'Bandung'
         ]);
+        User::create([
+            'name' => 'Pengelola',
+            'email' => 'pengelola@gmail.com',
+            'password' => Hash::make('pengelola12345'),
+            'role' => 'pengelola',
+            'jenis_kelamin' => 'Laki-Laki',
+            'no_telepon' => '089876543210',
+            'alamat' => 'Jl. Contoh No. 2',
+            'tanggal_lahir' => '1995-01-01',
+            'domisili' => 'Bandung'
+        ]);
     }
 } 

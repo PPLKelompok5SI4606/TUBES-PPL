@@ -36,7 +36,7 @@
                             <li><a class="dropdown-item" href="{{ route('waste-reports.index') }}">My Waste Reports</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <form method="POST" action="{{ route('logout') }}">
+                                <form method="POST" action="{{ route('auth.user.logout') }}">
                                     @csrf
                                     <button type="submit" class="dropdown-item">
                                         <i class="bi bi-box-arrow-right me-2"></i> Logout

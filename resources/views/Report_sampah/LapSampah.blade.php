@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Pengelolaan Sampah</title>
+    <title>@yield('title', 'Laporan Sampah - Cleansweep')</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -132,24 +135,62 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="{{ asset('images/login.png') }}" alt="login">
-        <h2>Cleansweep</h2>
-    </div>
-
-    <div class="profile-section">
-        <div class="profile-image" style="display: flex; justify-content: center; align-items: center; overflow: hidden;">
-            <img src="{{ asset('images/user.png') }}" alt="User Profile" style="width: 200%; height: 250%; object-fit: cover;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="{{ route('home') }}">CleanSweep</a>
+                <div class="d-flex gap-2">
+                    @auth
+                        <div class="dropdown">
+                            <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Auth::user()->name }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('auth.pengelola.logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
+                        <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
+                    @endauth
+                </div>
+            </div>
         </div>
-        <div>
-            <h3>BUDI HARIYANTO</h3>
-            <button class="report-button" style="display: flex; align-items: center; gap: 8px; height: 40px; width: 200px; padding: 0 15px;">
-                <img src="{{ asset('images/file.png') }}" alt="File" style="width: 50px; height: 50px; flex-shrink: 0;">
-                Laporan Sampah
-            </button>
-        </div>
-    </div>
-
+    </nav>
+    
+    @push('styles')
+    <style>
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #4B7F52;
+        }
+        
+        .btn-link {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+    @endpush    
     <div style="padding: 20px;">
         <table>
             <thead>
