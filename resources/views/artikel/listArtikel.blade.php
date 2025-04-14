@@ -107,53 +107,7 @@
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-primary-green navbar-dark">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">Logo</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="#">Get the App</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/articles">Articles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="#">About</a>
-          </li>
-        </ul>
-        <div class="d-flex">
-          @if (Auth::user())
-            <div class="dropdown">
-              <button class="btn text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fas fa-user-circle me-2"></i>{{ Auth::user()->name }}
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <form method="POST" action="{{ route('logout') }}" class="px-3">
-                    @csrf
-                    <button type="submit" class="btn btn-link text-decoration-none text-dark p-0">
-                      <i class="fas fa-sign-out-alt me-2"></i>Logout
-                    </button>
-                  </form>
-                </li>
-              </ul>
-            </div>
-          @else
-            <a href="{{ route('login') }}" class="btn btn-outline-light me-2">Sign In</a>
-            <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
-          @endif
-        </div>
-      </div>
-    </div>
-  </nav>
-
+  @include('partial.navbar')
   <!-- Content -->
   <div class="container py-5">
     <h1 class="text-center mb-5 fw-bold">List Artikel</h1>
