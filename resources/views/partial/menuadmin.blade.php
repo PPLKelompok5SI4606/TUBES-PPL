@@ -14,6 +14,19 @@
     </div>
 
     <div class="border-b border-border-gray w-[70%]"></div>
+
+    <!-- Pickup Requests Menu -->
+    <div class="flex flex-col w-full px-4 mt-4">
+        <!-- Nav Item Pickup Requests -->
+        <div class="nav-item {{ request()->routeIs('admin.pickup-requests') ? 'active' : '' }}">
+            <a class="nav-link text-white flex items-center justify-center gap-2" href="{{ route('admin.pickup-requests') }}">
+                <svg class="w-5" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M19 7h-3V5.5A2.5 2.5 0 0 0 13.5 3h-3A2.5 2.5 0 0 0 8 5.5V7H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zm-9-1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V7h-4zM8 18v-5h2v5zm3 0v-5h2v5zm5 0h-2v-5h2z"></path></g></svg>
+                <span>{{ __('Pickup Requests') }}</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="border-b border-border-gray w-[70%]"></div>
 </div>
 
 
