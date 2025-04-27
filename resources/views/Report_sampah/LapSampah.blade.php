@@ -90,7 +90,7 @@
         
         .dropdown-content a:hover {
             background-color: #f8f9fa;
-        }
+        }zz
         
         .status-description {
             font-size: 12px;
@@ -138,29 +138,41 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">CleanSweep</a>
-                <div class="d-flex gap-2">
-                    @auth
-                        <div class="dropdown">
-                            <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('auth.pengelola.logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
-                        <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
-                    @endauth
-                </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('laporan') }}">Laporan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('waste-collection') }}">Clean Collection</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex gap-2">
+                @auth
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('auth.pengelola.logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
+                    <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
+                @endauth
             </div>
         </div>
     </nav>
