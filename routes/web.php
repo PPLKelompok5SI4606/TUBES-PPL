@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
+use App\Http\Controllers\DelayReportController;
 
 
 // Redirect ke /home
@@ -88,4 +89,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
 
+    Route::resource('delay-reports', DelayReportController::class)->only([
+        'index', 'create', 'store', 'show'
+    ]);
 });
