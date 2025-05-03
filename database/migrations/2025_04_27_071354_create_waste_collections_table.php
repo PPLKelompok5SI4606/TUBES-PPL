@@ -10,9 +10,15 @@ return new class extends Migration
     {
         Schema::create('waste_collections', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount_kg', 8, 2); // Amount of waste in kilograms
-            $table->string('location'); // Disposal location
-            $table->date('collection_date'); // Date of collection
+            $table->decimal('amount_kg', 8, 2);
+            $table->string('location');
+            $table->string('type'); // Add type field
+            $table->enum('status', [
+                'pending',    // Laporan baru, menunggu penanganan
+                'in_progress', // Laporan sedang ditangani
+                'resolved'    // Laporan telah selesai ditangani
+            ])->default('pending');
+            $table->date('collection_date');
             $table->timestamps();
         });
     }

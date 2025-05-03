@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Add this in the head section -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Add these styles in the head section -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -135,7 +137,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #81C974;">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">CleanSweep</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -203,6 +205,7 @@
         }
     </style>
     @endpush    
+    <!-- Replace the existing table section with this -->
     <div style="padding: 20px;">
         <table>
             <thead>
@@ -211,9 +214,8 @@
                     <th>Lokasi</th>
                     <th>Deskripsi</th>
                     <th>Tanggal</th>
-                    <th>Tanggal Penugasan</th>
-                    <th>Tanggal Selesai</th>
                     <th>Status</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -223,247 +225,230 @@
                     <td>{{ $report->location }}</td>
                     <td>{{ $report->description }}</td>
                     <td>{{ $report->created_at->format('d F Y') }}</td>
+                    <td>{{ ucfirst($report->status) }}</td>
                     <td>
-                        @if($report->status !== 'pending')
-                        <input type="date" 
-                               class="form-control" 
-                               style="width: 150px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px;" 
-                               value="{{ $report->dispatch_date ? $report->dispatch_date->format('Y-m-d') : '' }}"
-                               onchange="updateDates({{ $report->id }}, 'dispatch_date', this.value)"
-                               id="dispatchDate{{ $report->id }}"
-                               {{ $report->status === 'resolved' ? 'readonly' : '' }}
-                               placeholder="Pilih tanggal">
-                        @else
-                        -
-                        @endif
-                    </td>
-                    <td>
-                        @if($report->status === 'resolved')
-                        <input type="date" 
-                               class="form-control" 
-                               style="width: 150px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px;" 
-                               value="{{ $report->completion_date ? $report->completion_date->format('Y-m-d') : '' }}"
-                               onchange="updateDates({{ $report->id }}, 'completion_date', this.value)"
-                               id="completionDate{{ $report->id }}"
-                               placeholder="Pilih tanggal">
-                        @else
-                        -
-                        @endif
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="action-button status-{{ str_replace('_', '-', $report->status) }}">
-                                {{ ucfirst(str_replace('_', ' ', $report->status)) }}
-                            </button>
-                            <div class="dropdown-content">
-                                <form id="statusForm{{ $report->id }}" action="{{ route('waste-reports.update', $report) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="status" value="{{ $report->status }}">
-                                    <input type="hidden" name="dispatch_date" value="{{ $report->dispatch_date }}">
-                                    <input type="hidden" name="completion_date" value="{{ $report->completion_date }}">
-                                    <a href="#" class="status-option" onclick="event.preventDefault(); selectStatus(this, 'pending', {{ $report->id }})">
-                                        Pending
-                                        <div class="status-description">Laporan baru, menunggu penanganan.</div>
-                                    </a>
-                                    <a href="#" class="status-option" onclick="event.preventDefault(); selectStatus(this, 'in_progress', {{ $report->id }})">
-                                        In Progress
-                                        <div class="status-description">Laporan sedang ditangani.</div>
-                                    </a>
-                                    <a href="#" class="status-option" onclick="event.preventDefault(); selectStatus(this, 'resolved', {{ $report->id }})">
-                                        Resolved
-                                        <div class="status-description">Laporan telah selesai ditangani.</div>
-                                    </a>
-                                </form>
-                            </div>
-                        </div>
+                        <button onclick="openModal({{ $report->id }})" class="btn btn-primary">
+                            Update Status
+                        </button>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-
-        <div class="entry-form">
-            <h3>Entry Tindak Lanjut</h3>
-            <button onclick="submitAllChanges()" class="submit-button" style="height: 50px; font-size: 18px; font-weight: bold;">
-                <img src="{{ asset('images/verif.png') }}" alt="verif" style="width: 50px; height: 50px;">
-                Simpan
-            </button>
+    </div>
+    
+    <!-- Add this modal form -->
+    <!-- Update the modal styles -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    
+        .modal-content {
+            background: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #ddd;
+        }
+    
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+    
+        .form-group {
+            margin-bottom: 15px;
+        }
+    
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+    
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+    
+        .button-group {
+            text-align: right;
+            margin-top: 20px;
+        }
+    
+        .btn-cancel,
+        .btn-save {
+            padding: 8px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            border: none;
+        }
+    
+        .btn-save {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+    </style>
+    
+    <!-- Update the modal HTML structure -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Update Status Laporan</h2>
+            <form id="updateStatusForm" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="reportId" name="report_id">
+                
+                <!-- Replace the location input with this dropdown -->
+                <div class="form-group">
+                    <label for="location">Lokasi Pembuangan</label>
+                    <select id="location" name="location" required>
+                      
+    
+                        <!-- TPS Options -->
+                        <option value="TPS Ciroyom">TPS Ciroyom</option>
+                        <option value="TPS Balubur">TPS Balubur</option>
+                        <option value="TPS Cicadas">TPS Cicadas</option>
+                        <option value="TPS Soekarno-Hatta">TPS Soekarno-Hatta</option>
+                        <option value="TPS Cibeunying">TPS Cibeunying</option>
+                        <option value="TPS Cijerah">TPS Cijerah</option>
+                        <option value="TPS Cibiru">TPS Cibiru</option>
+                        <option value="TPS Gedebage">TPS Gedebage</option>
+                        <option value="TPS Leuwigajah">TPS Leuwigajah</option>
+                        <option value="TPS Pasir Impun">TPS Pasir Impun</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="total_waste">Total Waste (kg)</label>
+                    <input type="number" id="total_waste" name="total_waste" step="0.01" value="0.00" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select id="type" name="type" required>
+                        <option value="TPA">TPA</option>
+                        <option value="TPS">TPS</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="pending">Pending - Laporan baru, menunggu penanganan</option>
+                        <option value="in_progress">In Progress - Laporan sedang ditangani</option>
+                        <option value="resolved">Resolved - Laporan telah selesai ditangani</option>
+                    </select>
+                </div>
+    
+                <div class="button-group">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn-save">Simpan</button>
+                </div>
+            </form>
         </div>
     </div>
-
+    
+    <!-- Update the JavaScript section -->
     <script>
-    // Store temporary changes
-    let statusChanges = {};
-    let dateChanges = {};
-
-    function updateDates(reportId, dateType, value) {
-        if (!dateChanges[reportId]) {
-            dateChanges[reportId] = {};
-        }
-        dateChanges[reportId][dateType] = value;
-        
-        const form = document.getElementById('statusForm' + reportId);
-        const hiddenInput = form.querySelector(`input[name="${dateType}"]`);
-        if (hiddenInput) {
-            hiddenInput.value = value;
-        }
-    }
-
-    function selectStatus(element, status, reportId) {
-        const button = element.closest('.dropdown').querySelector('.action-button');
-        const form = document.getElementById('statusForm' + reportId);
-        
-        // Store the status change temporarily
-        statusChanges[reportId] = {
-            form: form,
-            status: status
-        };
-        
-        // Update button text and class
-        const statusText = status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
-        button.textContent = statusText;
-        button.className = 'action-button status-' + status.replace('_', '-');
-        
-        // Remove selected class from all options
-        const allOptions = element.closest('.dropdown-content').querySelectorAll('.status-option');
-        allOptions.forEach(option => option.classList.remove('selected'));
-        
-        // Add selected class to clicked option
-        element.classList.add('selected');
-        
-        // Show/hide date inputs based on status
-        const dispatchDateInput = document.getElementById('dispatchDate' + reportId);
-        const completionDateInput = document.getElementById('completionDate' + reportId);
-        const dispatchDateCell = dispatchDateInput ? dispatchDateInput.closest('td') : null;
-        const completionDateCell = completionDateInput ? completionDateInput.closest('td') : null;
-    
-        if (dispatchDateCell) {
-            if (status === 'pending') {
-                dispatchDateCell.innerHTML = '-';
-            } else {
-                // Show dispatch date input for both in_progress and resolved
-                dispatchDateCell.innerHTML = `
-                    <input type="date" 
-                           class="form-control" 
-                           style="width: 150px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px;" 
-                           value="${dateChanges[reportId]?.dispatch_date || ''}"
-                           onchange="updateDates(${reportId}, 'dispatch_date', this.value)"
-                           id="dispatchDate${reportId}"
-                           ${status === 'resolved' ? 'readonly' : ''}
-                           placeholder="Pilih tanggal">
-                `;
-            }
-        }
-    
-        if (completionDateCell) {
-            if (status === 'resolved') {
-                // Get the existing completion date from the form or database
-                const existingDate = form.querySelector('input[name="completion_date"]').value || 
-                               (document.getElementById('completionDate' + reportId)?.value || '');
-                
-                // Show completion date input immediately when resolved is selected
-                completionDateCell.innerHTML = `
-                    <input type="date" 
-                           class="form-control" 
-                           style="width: 150px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px;" 
-                           value="${existingDate}"
-                           onchange="updateDates(${reportId}, 'completion_date', this.value)"
-                           id="completionDate${reportId}"
-                           placeholder="Pilih tanggal">
-                `;
-            } else {
-                completionDateCell.innerHTML = '-';
-            }
-        }
-        
-        // Close the dropdown
-        element.closest('.dropdown-content').style.display = 'none';
-    }
-
-    function submitAllChanges() {
-        // Get all reports that have changes
-        const reportIds = new Set([
-            ...Object.keys(statusChanges),
-            ...Object.keys(dateChanges)
-        ]);
-        
-        const promises = [];
-        
-        reportIds.forEach(reportId => {
-            const form = document.getElementById('statusForm' + reportId);
-            const formData = new FormData(form);
+        function openModal(reportId) {
+            document.getElementById('reportId').value = reportId;
+            document.getElementById('statusModal').style.display = 'block';
             
-            // Add status if changed
-            if (statusChanges[reportId]) {
-                formData.set('status', statusChanges[reportId].status);
-            }
-            
-            // Add dates if changed
-            if (dateChanges[reportId]) {
-                if (dateChanges[reportId].dispatch_date) {
-                    formData.set('dispatch_date', dateChanges[reportId].dispatch_date);
-                }
-                if (dateChanges[reportId].completion_date) {
-                    formData.set('completion_date', dateChanges[reportId].completion_date);
-                }
-            }
-            
-            promises.push(
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-            );
-        });
-    
-        // If there are changes, submit them
-        if (promises.length > 0) {
-            Promise.all(promises)
-                .then(() => {
-                    // Clear all changes
-                    statusChanges = {};
-                    dateChanges = {};
-                    // Reload the page to show updated data
-                    window.location.reload();
-                })
-                .catch(error => {
-                    console.error('Error updating reports:', error);
+            // Fetch existing data and populate form
+            fetch(`/api/waste-reports/${reportId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('location').value = data.location || '';
+                    document.getElementById('total_waste').value = data.total_waste || '';
+                    document.getElementById('type').value = data.type || 'TPS';
+                    document.getElementById('status').value = data.status || 'pending';
                 });
         }
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdowns = document.querySelectorAll('.dropdown-content');
-        dropdowns.forEach(dropdown => {
-            if (!event.target.closest('.dropdown')) {
-                dropdown.style.display = 'none';
+    
+        function closeModal() {
+            document.getElementById('statusModal').style.display = 'none';
+        }
+    
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('statusModal')) {
+                closeModal();
             }
-        });
-    });
-
-    // Toggle dropdown visibility
-    document.querySelectorAll('.action-button').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.stopPropagation();
-            const dropdown = this.nextElementSibling;
-            const allDropdowns = document.querySelectorAll('.dropdown-content');
-            
-            // Close all other dropdowns
-            allDropdowns.forEach(d => {
-                if (d !== dropdown) {
-                    d.style.display = 'none';
+        }
+    
+        // Handle form submission
+        document.getElementById('updateStatusForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const reportId = document.getElementById('reportId').value;
+            const formData = new FormData(this);
+            const statusValue = document.getElementById('status').value;
+    
+            fetch(`/waste-reports/${reportId}`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the status in the table
+                    const statusCell = document.querySelector(`tr[data-report-id="${reportId}"] td:nth-child(5)`);
+                    if (statusCell) {
+                        statusCell.textContent = statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+                        
+                        // Update status cell styling
+                        statusCell.className = ''; // Remove existing status classes
+                        statusCell.classList.add(`status-${statusValue.replace('_', '-')}`);
+                    }
+                    closeModal();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update status. Please try again.');
             });
-            
-            // Toggle current dropdown
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         });
-    });
     </script>
+    <!-- Update the footer section -->
+    <footer class="bg-success" style="background-color: #81C974 !important; padding: 10px 0; position: fixed; bottom: 0; width: 100%;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold">CleanSweep</span>
+                            <span class="mx-2">|</span>
+                            <span>Making our world cleaner, one waste at a time.</span>
+                        </div>
+                        <div>
+                            <span>© 2025 CleanSweep. All rights reserved.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -96,6 +96,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Waste Collection Routes (renamed to match navbar's 'waste-collection')
+// Add this inside the waste collection routes group
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('waste-collection');
+    Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
+    Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });

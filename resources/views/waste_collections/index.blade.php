@@ -135,7 +135,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #81C974;">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">CleanSweep</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,18 +184,42 @@
             <thead>
                 <tr>
                     <th class="py-2 px-4 border">Location</th>
+                    <th class="py-2 px-4 border">Type</th>
                     <th class="py-2 px-4 border">Total Waste (kg)</th>
+                    <th class="py-2 px-4 border">Status</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($summary as $item)
                     <tr>
-                        <td class="py-2 px-4 border">{{ $item->location }}</td>
+                        <td class="py-2 px-4 border">{{ $item->collectionPoint->name }}</td>
+                        <td class="py-2 px-4 border">{{ $item->collectionPoint->type }}</td>
                         <td class="py-2 px-4 border">{{ number_format($item->total_waste, 2) }}</td>
+                        <td class="py-2 px-4 border">{{ $item->status->format('Pending','In Progress','Resolved') }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+    <!-- Add before closing body tag -->
     </div>
+    <!-- Update the footer section -->
+    <footer class="bg-success" style="background-color: #81C974 !important; padding: 10px 0; position: fixed; bottom: 0; width: 100%;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold">CleanSweep</span>
+                            <span class="mx-2">|</span>
+                            <span>Making our world cleaner, one waste at a time.</span>
+                        </div>
+                        <div>
+                            <span>© 2025 CleanSweep. All rights reserved.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
