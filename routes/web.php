@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\PickupRequestController;
 use App\Http\Controllers\WasteReportController;
 use App\Http\Controllers\WasteCollectionController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminPickupRequestController;
 
 
 // Redirect ke /home
@@ -19,7 +21,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/articles', [ArticleController::class, 'listArticles']);
 Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('article.show');
 
+Route::get('/map', [MapController::class, 'index'])->name('map');
 
+Route::get('/facilities', [MapController::class, 'index'])->name('peta.index');
 
 // 🔐 Hanya untuk user yang sudah login
 Route::middleware('checkRole:admin')->group(function () {
@@ -32,6 +36,11 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
     Route::get('/admin/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+
+    // Admin Pickup Requests Routes
+    Route::get('/admin/pickup-requests', [AdminPickupRequestController::class, 'index'])->name('admin.pickup-requests');
+    Route::get('/admin/pickup-requests/{pickupRequest}', [AdminPickupRequestController::class, 'show'])->name('admin.pickup-requests.show');
+    Route::put('/admin/pickup-requests/{pickupRequest}', [AdminPickupRequestController::class, 'update'])->name('admin.pickup-requests.update');
 });
 
 Route::match(['get', 'post'], '/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');

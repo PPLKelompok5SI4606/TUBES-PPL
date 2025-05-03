@@ -15,11 +15,13 @@ class PickupRequest extends Model
         'description',
         'status',
         'admin_id',
-        'pickup_time'
+        'pickup_time',
+        'admin_notes'
     ];
 
     protected $casts = [
-        'pickup_time' => 'datetime'
+        'pickup_time' => 'datetime',
+        'status' => 'string'
     ];
 
     public function user()

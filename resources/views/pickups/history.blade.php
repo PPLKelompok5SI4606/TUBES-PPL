@@ -32,6 +32,7 @@
                                         <th>Alamat</th>
                                         <th>Status</th>
                                         <th>Waktu Pengambilan</th>
+                                        <th>Catatan Admin</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,6 +56,13 @@
                                                     {{ \Carbon\Carbon::parse($request->pickup_time)->format('d M Y, H:i') }}
                                                 @else
                                                     <span class="text-muted">Belum ditentukan</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($request->admin_notes)
+                                                    <span class="text-muted">{{ Str::limit($request->admin_notes, 30) }}</span>
+                                                @else
+                                                    <span class="text-muted">-</span>
                                                 @endif
                                             </td>
                                         </tr>
