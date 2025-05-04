@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
+use App\Http\Controllers\TpsTpaController;
 
 
 // Redirect ke /home
@@ -69,12 +70,11 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// Laporan Sampah
+// Laporan Sampah dan TPS/TPA Routes
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
+    Route::resource('tps-tpa', TpsTpaController::class);
 });
-
-
 
 // Waste Reports Routes
 Route::middleware(['auth'])->group(function () {
@@ -87,5 +87,4 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
-
 });
