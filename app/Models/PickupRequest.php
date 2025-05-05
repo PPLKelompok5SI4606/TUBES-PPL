@@ -13,6 +13,7 @@ class PickupRequest extends Model
         'user_id',
         'address',
         'description',
+        'jenis_sampah',
         'status',
         'admin_id',
         'pickup_time',
@@ -38,4 +39,4 @@ class PickupRequest extends Model
     {
         return $this->hasMany(Notification::class);
     }
-} 
+}

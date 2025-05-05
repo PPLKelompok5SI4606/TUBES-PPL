@@ -12,6 +12,10 @@ use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
 use App\Http\Controllers\TpsTpaController;
+use App\Http\Controllers\DashboardController;
+
+//dashboard
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
 // Redirect ke /home
@@ -19,14 +23,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/articles', [ArticleController::class, 'listArticles']);
 Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('article.show');
-
 Route::get('/map', [MapController::class, 'index'])->name('map');
 
 Route::get('/facilities', [MapController::class, 'index'])->name('peta.index');
 
+
+
 // 🔐 Hanya untuk user yang sudah login
 Route::middleware('checkRole:admin')->group(function () {
     Route::get('/admin/home', [ArticleController::class, 'index'])->name('admin.home');
+    Route::get('/admin/sampah', [PickupRequestController::class, 'sampah'])->name('admin.sampah');
 
     Route::post('/articles', [ArticleController::class, 'store']);
 
