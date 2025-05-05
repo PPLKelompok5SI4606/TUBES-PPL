@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
+use App\Http\Controllers\DelayReportController;
 use App\Http\Controllers\TpsTpaController;
 use App\Http\Controllers\DashboardController;
 
@@ -112,6 +113,15 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
 });
+
+    // Delay Reports Routes
+    Route::prefix('delay-reports')->group(function () {
+        Route::get('/', [DelayReportController::class, 'index'])->name('delay-reports.index');
+        Route::get('/create', [DelayReportController::class, 'create'])->name('delay-reports.create');
+        Route::post('/', [DelayReportController::class, 'store'])->name('delay-reports.store');
+        Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
+        Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
+    });
 
 // Waste Collection Routes (renamed to match navbar's 'waste-collection')
 // Add this inside the waste collection routes group
