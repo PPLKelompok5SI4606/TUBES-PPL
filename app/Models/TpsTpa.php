@@ -16,11 +16,19 @@ class TpsTpa extends Model
         'kapasitas_total',
         'kapasitas_terisi',
         'lokasi',
-        'status'
+        'lat',
+        'lng',
+        'status',
+        'description'
     ];
+    
+    protected $appends = ['persentase_terisi'];
 
     public function getPersentaseTerisiAttribute()
     {
-        return ($this->kapasitas_terisi / $this->kapasitas_total) * 100;
+        if ($this->kapasitas_total > 0) {
+            return ($this->kapasitas_terisi / $this->kapasitas_total) * 100;
+        }
+        return 0;
     }
-} 
+}
