@@ -39,4 +39,9 @@ class PickupRequest extends Model
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function collectionPoint()
+    {
+        return $this->belongsTo(\App\Models\CollectionPoint::class);
+    }
 }

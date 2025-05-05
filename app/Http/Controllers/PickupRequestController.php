@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PickupRequest;
+use App\Models\CollectionPoint;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -29,7 +30,9 @@ class PickupRequestController extends BaseController
 
     public function create()
     {
-        return view('pickups.create');
+        $tpsPoints = CollectionPoint::where('type', 'TPS')->get();
+        $tpaPoints = CollectionPoint::where('type', 'TPA')->get();
+        return view('pickups.create', compact('tpsPoints', 'tpaPoints'));
     }
 
     public function store(Request $request)
@@ -37,7 +40,7 @@ class PickupRequestController extends BaseController
         $validated = $request->validate([
             'address' => 'required|string|max:255',
             'description' => 'required|string',
-            'jenis_sampah' => 'nullable|string|max:100',
+            'jenis_sampah' => 'required|exists:collection_points,id',
             'pickup_time' => 'nullable|date|after:now',
         ]);
 
@@ -45,7 +48,7 @@ class PickupRequestController extends BaseController
         $pickupRequest->user_id = auth()->id();
         $pickupRequest->address = $validated['address'];
         $pickupRequest->description = $validated['description'];
-        $pickupRequest->jenis_sampah = $validated['jenis_sampah'] ?? null;
+        $pickupRequest->collection_point_id = $validated['jenis_sampah'];
         $pickupRequest->pickup_time = $validated['pickup_time'] ?? null;
         $pickupRequest->status = 'pending';
         $pickupRequest->save();
