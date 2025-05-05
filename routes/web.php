@@ -114,13 +114,13 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-    // Delay Reports Routes
-    Route::prefix('delay-reports')->group(function () {
-        Route::get('/', [DelayReportController::class, 'index'])->name('delay-reports.index');
-        Route::get('/create', [DelayReportController::class, 'create'])->name('delay-reports.create');
-        Route::post('/', [DelayReportController::class, 'store'])->name('delay-reports.store');
-        Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
-        Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
+// Delay Reports Routes
+Route::prefix('delay-reports')->group(function () {
+    Route::get('/', [DelayReportController::class, 'index'])->name('delay-reports.index');
+    Route::get('/create', [DelayReportController::class, 'create'])->name('delay-reports.create');
+    Route::post('/', [DelayReportController::class, 'store'])->name('delay-reports.store');
+    Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
+    Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
     });
 
 // Waste Collection Routes (renamed to match navbar's 'waste-collection')
