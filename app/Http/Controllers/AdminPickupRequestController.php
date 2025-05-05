@@ -12,7 +12,7 @@ class AdminPickupRequestController extends Controller
         $pickupRequests = PickupRequest::with('user')
             ->latest()
             ->paginate(10);
-            
+
         return view('admin.pickup-requests.index', compact('pickupRequests'));
     }
 
@@ -40,4 +40,4 @@ class AdminPickupRequestController extends Controller
         return redirect()->route('admin.pickup-requests.show', $pickupRequest)
             ->with('success', 'Pickup request status updated successfully!');
     }
-} 
+}
