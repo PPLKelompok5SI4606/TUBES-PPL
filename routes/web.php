@@ -114,8 +114,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
+        // Add new route for updating with collection
+        Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])->name('waste-reports.update-with-collection');
     });
 });
+
+// API Routes for waste reports
+Route::get('/api/waste-reports/{id}', [WasteReportController::class, 'apiGetReport']);
 
 // Delay Reports Routes
 Route::prefix('delay-reports')->group(function () {

@@ -181,7 +181,8 @@ class WasteReportController extends Controller
     public function laporan()
     {
         $wasteReports = WasteReport::with('user')->latest()->get();
-        return view('Report_sampah.LapSampah', compact('wasteReports'));
+        $tpsPoints = \App\Models\TpsTpa::all();
+        return view('Report_sampah.LapSampah', compact('wasteReports', 'tpsPoints'));
     }
 
     public function laporanUpdate(Request $request, $id)
