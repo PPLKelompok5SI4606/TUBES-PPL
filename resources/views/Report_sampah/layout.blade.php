@@ -13,18 +13,53 @@
             margin: 0;
             padding: 0;
         }
-        .header {
-            background-color: #81C974;
-            padding: 15px;
+        
+        /* Navigation styles */
+        .main-nav {
+            background-color: #4CAF50;
             color: white;
-            display: flex;
-            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        
+        .navbar-brand {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: white !important;
+            text-decoration: none;
+        }
+        
+        .nav-link {
+            color: white !important;
+            margin: 0 10px;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: rgba(255,255,255,0.8) !important;
+        }
+        
+        .nav-link.active {
+            color: rgba(255,255,255,1) !important;
+        }
+        
+        .nav-link.active:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+        
         .header img {
             width: 40px;
             height: 40px;
             margin-right: 15px;
         }
+        
         .profile-section {
             padding: 20px;
             display: flex;
@@ -132,76 +167,73 @@
             justify-content: center;
             gap: 10px;
         }
+        
+        .auth-buttons .btn {
+            margin-left: 10px;
+        }
+        
+        .btn-outline-light {
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .btn-outline-light:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
     </style>
+    @stack('styles')
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <!-- Combined navbar -->
+    <nav class="main-nav">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">CleanSweep</a>
-                <div class="d-flex gap-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand me-4" href="{{ route('home') }}">CleanSweep</a>
+                    
+                    <div class="d-none d-md-flex">
+                        <a class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}" href="{{ route('laporan') }}">Laporan</a>
+                        <a class="nav-link {{ request()->routeIs('waste-collection') ? 'active' : '' }}" href="{{ route('waste-collection') }}">Clean Collection</a>
+                        <a class="nav-link {{ request()->routeIs('laporan.report-delay') ? 'active' : '' }}" href="{{ route('laporan.report-delay') }}">Report Delay</a>
+                    </div>
+                </div>
+                
+                <div class="auth-buttons">
                     @auth
-                        <div class="dropdown">
-                            <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('laporan') }}">
-                                        Waste Tracking
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('laporan.report-delay') }}">
-                                        Report Delay
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('auth.pengelola.logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <form method="POST" action="{{ route('auth.pengelola.logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
-                        <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
+                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">Sign In</a>
+                        <a href="{{ route('register') }}" class="btn btn-light btn-sm">Sign Up</a>
                     @endauth
+                </div>
+            </div>
+            
+            <!-- Mobile navigation menu -->
+            <div class="d-md-none mt-2 pt-2 border-top border-light">
+                <div class="d-flex justify-content-between">
+                    <a class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}" href="{{ route('laporan') }}">Laporan</a>
+                    <a class="nav-link {{ request()->routeIs('waste-collection') ? 'active' : '' }}" href="{{ route('waste-collection') }}">Clean Collection</a>
+                    <a class="nav-link {{ request()->routeIs('laporan.report-delay') ? 'active' : '' }}" href="{{ route('laporan.report-delay') }}">Report Delay</a>
                 </div>
             </div>
         </div>
     </nav>
     
-    @push('styles')
-    <style>
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        }
-        
-        .dropdown-item {
-            padding: 0.5rem 1rem;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #4B7F52;
-        }
-        
-        .btn-link {
-            color: white;
-            text-decoration: none;
-        }
-        
-        .btn-link:hover {
-            color: rgba(255, 255, 255, 0.8);
-        }
-    </style>
-    @endpush    
     @yield('content')
+    
     <script>
         // Store temporary changes
         let statusChanges = {};

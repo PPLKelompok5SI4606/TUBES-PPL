@@ -1,8 +1,9 @@
 @extends('Report_sampah.layout')
 
 @section('content')
-<div class="container">
-    <div class="row mb-4 mt-4">
+<!-- Content section -->
+<div class="container mt-4">
+    <div class="row mb-4">
         <div class="col">
             <h2 class="text-success">
                 <i class="bi bi-clock-history"></i> Report Delay
@@ -37,9 +38,9 @@
                     <p class="text-muted">There are no delay reports to display.</p>
                 </div>
             @else
-                <div>
-                    <table class="table table-hover">
-                        <thead>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="bg-light">
                             <tr>
                                 <th>No.</th>
                                 <th>Location</th>

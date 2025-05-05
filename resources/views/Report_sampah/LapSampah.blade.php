@@ -1,15 +1,13 @@
 @extends('Report_sampah.layout')
 
 @section('content')
-<div class="container">
-    <div class="row mb-4 mt-4">
-        <div class="col">
-            <h2 class="text-success">
-                <i class="bi bi-trash"></i> Waste Tracking
-            </h2>
-        </div>
-    </div>
+<!-- Add meta tags and custom styles -->
+<head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
 
+<!-- Content section -->
+<div class="container mt-4">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -17,169 +15,237 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-trash fs-3 me-2"></i>
+        <h2 class="mb-0">Laporan Sampah</h2>
+    </div>
+</div>
+
+<!-- Table section -->
+<div class="container">
     <div class="card">
         <div class="card-body">
-            @if($wasteReports->isEmpty())
-                <div class="text-center py-5">
-                    <i class="bi bi-inbox text-success" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">No Waste Reports Found</h4>
-                    <p class="text-muted">There are no waste reports to display.</p>
-                </div>
-            @else
-                <div>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Location</th>
-                                <th>Description</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($wasteReports as $report)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>
-                                    {{ $report->location }}
-                                    <button class="btn btn-sm btn-outline-primary ms-2" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#locationModal"
-                                            data-location="{{ $report->location }}"
-                                            data-lat="{{ $report->latitude }}"
-                                            data-lng="{{ $report->longitude }}">
-                                        <i class="bi bi-map"></i> View Map
-                                    </button>
-                                </td>
-                                <td>{{ $report->description }}</td>
-                                <td>{{ $report->created_at->format('d M Y') }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn btn-sm dropdown-toggle 
-                                            @if($report->status === 'pending') btn-outline-secondary
-                                            @elseif($report->status === 'in_progress') btn-outline-warning
-                                            @elseif($report->status === 'resolved') btn-outline-success
-                                            @endif" 
-                                            data-bs-toggle="dropdown">
-                                            {{ ucfirst(str_replace('_', ' ', $report->status)) }}
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <form id="statusForm{{ $report->id }}" action="{{ route('waste-reports.update', $report) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="status" value="{{ $report->status }}">
-                                                    <a href="#" class="dropdown-item" onclick="event.preventDefault(); selectStatus(this, 'pending', {{ $report->id }})">
-                                                        <span class="badge bg-secondary me-2">Pending</span>
-                                                        <small>New report, waiting for handling</small>
-                                                    </a>
-                                                    <a href="#" class="dropdown-item" onclick="event.preventDefault(); selectStatus(this, 'in_progress', {{ $report->id }})">
-                                                        <span class="badge bg-warning me-2">In Progress</span>
-                                                        <small>Report is being handled</small>
-                                                    </a>
-                                                    <a href="#" class="dropdown-item" onclick="event.preventDefault(); selectStatus(this, 'resolved', {{ $report->id }})">
-                                                        <span class="badge bg-success me-2">Resolved</span>
-                                                        <small>Report has been resolved</small>
-                                                    </a>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="d-flex justify-content-end mt-4">
-                    <button onclick="submitAllChanges()" class="btn btn-success">
-                        <i class="bi bi-save"></i> Save All Changes
-                    </button>
-                </div>
-            @endif
-        </div>
-    </div>
-</div>
-
-<!-- Location Modal -->
-<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="locationModalLabel">Location Map</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="map" style="height: 400px; width: 100%;"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>No.</th>
+                            <th>Lokasi</th>
+                            <th>Deskripsi</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($wasteReports as $report)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $report->location }}</td>
+                            <td>{{ $report->description }}</td>
+                            <td>{{ $report->created_at->format('d F Y') }}</td>
+                            <td>
+                                <span class="badge rounded-pill bg-{{ $report->status == 'pending' ? 'warning' : ($report->status == 'in_progress' ? 'primary' : 'success') }}">
+                                    {{ ucfirst($report->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                <button onclick="openModal({{ $report->id }})" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil-square"></i> Update
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Include Leaflet CSS and JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-<script>
-    // Initialize map variable
-    let map;
-    let marker;
-
-    // Handle modal show event
-    document.getElementById('locationModal').addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget;
-        const location = button.getAttribute('data-location');
-        const lat = parseFloat(button.getAttribute('data-lat'));
-        const lng = parseFloat(button.getAttribute('data-lng'));
-        
-        // Update modal title
-        document.getElementById('locationModalLabel').textContent = `Location: ${location}`;
-        
-        // Initialize map if not already done
-        if (!map) {
-            map = L.map('map').setView([lat, lng], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        } else {
-            map.setView([lat, lng], 15);
-        }
-        
-        // Remove existing marker if any
-        if (marker) {
-            map.removeLayer(marker);
-        }
-        
-        // Add new marker
-        marker = L.marker([lat, lng]).addTo(map)
-            .bindPopup(`<b>${location}</b><br>Waste report location`);
-    });
-
-    function selectStatus(element, status, id) {
-        const form = document.getElementById(`statusForm${id}`);
-        form.querySelector('input[name="status"]').value = status;
-        form.submit();
-    }
-
-    function submitAllChanges() {
-        // Implement your logic to submit all changes
-        alert('All changes have been saved!');
-    }
-</script>
-
+<!-- Modal styles -->
 <style>
-    .dropdown-menu {
-        min-width: 250px;
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1);
+        z-index: 1000;
     }
-    .dropdown-item small {
+
+    .modal-content {
+        background: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        width: 90%;
+        max-width: 500px;
+        border: 1px solid #ddd;
+    }
+
+    .modal-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: normal;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
         display: block;
-        color: #6c757d;
-        font-size: 0.875em;
+        margin-bottom: 5px;
+        font-style: italic;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .button-group {
+        text-align: right;
+        margin-top: 20px;
+    }
+
+    .btn-cancel,
+    .btn-save {
+        padding: 8px 20px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        border: none;
+    }
+
+    .btn-save {
+        background: #28a745;
+        color: white;
+        border: none;
     }
 </style>
+
+<!-- Modal structure -->
+<div id="statusModal" class="modal">
+    <div class="modal-content">
+        <h2 class="modal-title">Update Status Laporan</h2>
+        <form id="updateStatusForm" method="POST">
+            @csrf
+            <input type="hidden" id="reportId" name="report_id">
+            
+            <div class="form-group">
+                <label for="location">Lokasi Pembuangan</label>
+                <select id="location" name="location" required>
+                    <option value="">-- Pilih Lokasi --</option>
+                    
+                    @foreach($tpsPoints as $site)
+                        <option value="{{ $site->nama }}">{{ $site->nama }} ({{ $site->tipe }})</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="total_waste">Total Waste (kg)</label>
+                <input type="number" id="total_waste" name="total_waste" step="0.01" value="0.00" required>
+            </div>
+
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select id="type" name="type" required>
+                    <option value="TPA">TPA</option>
+                    <option value="TPS">TPS</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="pending">Pending - Laporan baru, menunggu penanganan</option>
+                    <option value="in_progress">In Progress - Laporan sedang ditangani</option>
+                    <option value="resolved">Resolved - Laporan telah selesai ditangani</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+                <button type="submit" class="btn-save">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal JavaScript -->
+<script>
+    function openModal(reportId) {
+        document.getElementById('reportId').value = reportId;
+        document.getElementById('statusModal').style.display = 'block';
+        
+        // Fetch existing data and populate form
+        fetch(`/api/waste-reports/${reportId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('location').value = data.location || '';
+                document.getElementById('total_waste').value = data.total_waste || '';
+                document.getElementById('type').value = data.type || 'TPS';
+                document.getElementById('status').value = data.status || 'pending';
+            });
+    }
+
+    function closeModal() {
+        document.getElementById('statusModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('statusModal')) {
+            closeModal();
+        }
+    }
+
+    // Handle form submission
+    document.getElementById('updateStatusForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const reportId = document.getElementById('reportId').value;
+        const formData = new FormData(this);
+
+        // Add the CSRF token to the form data
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+
+        fetch(`/waste-reports/${reportId}/update-with-collection`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Status updated and collection recorded successfully!');
+                window.location.reload(); // Reload to see changes
+            } else {
+                alert('Failed to update: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update status. Please try again.');
+        });
+    });
+</script>
 @endsection
