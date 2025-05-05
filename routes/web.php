@@ -111,6 +111,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
+        Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])
+            ->name('waste-reports.update-with-collection');
     });
 });
 
