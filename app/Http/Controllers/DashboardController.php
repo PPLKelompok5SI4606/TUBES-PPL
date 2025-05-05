@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\User;
 use App\Models\PickupRequest;
+use App\Models\DelayReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -39,6 +40,12 @@ class DashboardController extends Controller
             $rejectedPickup = PickupRequest::where('status', 'rejected')->count();
             $acceptedPickup = PickupRequest::where('status', 'accepted')->count();
             $pendingPickup = PickupRequest::where('status', 'pending')->count();
+
+            // Delay Reports Statistics
+            $totalDelayReports = DelayReport::count();
+            $pendingDelayReports = DelayReport::where('status', 'pending')->count();
+            $inProgressDelayReports = DelayReport::where('status', 'in_progress')->count();
+            $resolvedDelayReports = DelayReport::where('status', 'resolved')->count();
 
             // Prepare data untuk grafik
             $months = [
@@ -125,7 +132,11 @@ class DashboardController extends Controller
                 'statusPending',
                 'statusAccepted',
                 'statusRejected',
-                'statusCompleted'
+                'statusCompleted',
+                'totalDelayReports',
+                'pendingDelayReports',
+                'inProgressDelayReports',
+                'resolvedDelayReports'
             ));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
