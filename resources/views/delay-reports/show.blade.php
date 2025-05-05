@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.delay')
 
 @section('content')
 <div class="container">

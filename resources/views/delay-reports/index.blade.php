@@ -1,65 +1,75 @@
-@extends('layouts.app')
+@extends('layouts.delay')
+
+@section('title', 'Delay Reports - Cleansweep')
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Daftar Laporan Keterlambatan</span>
-                    <a href="{{ route('delay-reports.create') }}" class="btn btn-primary">Buat Laporan Baru</a>
-                </div>
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-success">
+                <i class="bi bi-exclamation-triangle"></i> Delay Reports
+            </h2>
+        </div>
+        <div class="col text-end">
+            <a href="{{ route('delay-reports.history') }}" class="btn btn-outline-success">
+                <i class="bi bi-clock-history"></i> View History
+            </a>
+        </div>
+    </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
                 <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
+                    <h5 class="card-title text-success">
+                        <i class="bi bi-info-circle"></i> About Delay Reports
+                    </h5>
+                    <p class="card-text">
+                        Use this form to report any delays in waste collection services. Your reports help us improve our service and address issues promptly.
+                    </p>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> Report collection delays</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Track service issues</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Help improve our service</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-success">
+                        <i class="bi bi-plus-circle"></i> Create New Report
+                    </h5>
+                    <form action="{{ route('delay-reports.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control @error('location') is-invalid @enderror" 
+                                   id="location" name="location" value="{{ old('location') }}" required>
+                            @error('location')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                    @endif
-
-                    @if($reports->isEmpty())
-                        <div class="alert alert-info">
-                            Belum ada laporan keterlambatan.
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" 
+                                      id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                    @else
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Lokasi</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($reports as $report)
-                                        <tr>
-                                            <td>{{ $report->created_at->format('d/m/Y H:i') }}</td>
-                                            <td>{{ $report->location }}</td>
-                                            <td>
-                                                @switch($report->status)
-                                                    @case('pending')
-                                                        <span class="badge bg-warning">Menunggu</span>
-                                                        @break
-                                                    @case('in_progress')
-                                                        <span class="badge bg-info">Diproses</span>
-                                                        @break
-                                                    @case('resolved')
-                                                        <span class="badge bg-success">Selesai</span>
-                                                        @break
-                                                @endswitch
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('delay-reports.show', $report) }}" 
-                                                   class="btn btn-sm btn-info">Detail</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-send"></i> Submit Report
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

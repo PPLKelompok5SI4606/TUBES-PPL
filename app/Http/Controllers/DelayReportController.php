@@ -44,4 +44,13 @@ class DelayReportController extends Controller
         $this->authorize('view', $delayReport);
         return view('delay-reports.show', compact('delayReport'));
     }
+
+    public function history()
+    {
+        $reports = DelayReport::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        return view('delay-reports.history', compact('reports'));
+    }
 } 
