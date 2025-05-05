@@ -178,6 +178,52 @@ class WasteReportController extends Controller
             ->with('success', 'Laporan sampah berhasil dihapus!');
     }
 
+    public function updateWithCollection(Request $request, $wasteReportId)
+    {
+        $validated = $request->validate([
+            'location' => 'required|string',
+            'total_waste' => 'required|numeric',
+            'type' => 'required|string',
+            'status' => 'required|string|in:pending,in_progress,resolved',
+        ]);
+
+        // Find the waste report
+        $wasteReport = WasteReport::findOrFail($wasteReportId);
+
+        // 1. Update the waste report status
+        $wasteReport->update([
+            'status' => $validated['status']
+        ]);
+
+        // 2. Find or create the collection point
+        $collectionPoint = \App\Models\CollectionPoint::firstOrCreate(
+            ['name' => $validated['location'], 'type' => $validated['type']],
+            [
+                'name' => $validated['location'],
+                'type' => $validated['type'],
+                'lat' => 0, // Default values
+                'lng' => 0, // Default values
+                'description' => 'Auto-created from waste report'
+            ]
+        );
+
+        // 3. Create the waste collection record
+        $wasteCollection = new \App\Models\WasteCollection([
+            'amount_kg' => $validated['total_waste'],
+            'collection_point_id' => $collectionPoint->id,
+            'location' => $validated['location'],
+            'type' => $validated['type'],
+            'status' => $validated['status'],  // Add the status from the form
+            'collection_date' => now(),
+        ]);
+        $wasteCollection->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated and collection recorded successfully'
+        ]);
+    }
+
     public function laporan()
     {
         $wasteReports = WasteReport::with('user')->latest()->get();
