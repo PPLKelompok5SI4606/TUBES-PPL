@@ -61,6 +61,41 @@
                 <canvas id="grafikStatusPickup"></canvas>
             </div>
         </div>
+
+        <!-- Waste Report Statistics -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100 mt-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Waste Report Statistics</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-6">
+                <div class="text-center">
+                    <div class="font-bold text-2xl text-gray-800">{{ $totalWasteReports }}</div>
+                    <div class="text-gray-500">Total Reports</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-bold text-2xl text-yellow-500">{{ $pendingWasteReports }}</div>
+                    <div class="text-gray-500">Pending</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-bold text-2xl text-blue-500">{{ $inProgressWasteReports }}</div>
+                    <div class="text-gray-500">In Progress</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-bold text-2xl text-green-500">{{ $resolvedWasteReports }}</div>
+                    <div class="text-gray-500">Resolved</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-bold text-2xl text-red-500">{{ $rejectedWasteReports }}</div>
+                    <div class="text-gray-500">Rejected</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Waste Report Chart -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100 mt-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Waste Report Status Chart</h2>
+            <div class="w-full" style="height: 400px;">
+                <canvas id="wasteReportChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <!-- Right Column -->
@@ -168,6 +203,61 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins: {
                 legend: {
                     position: 'top',
+                }
+            }
+        }
+    });
+
+    // Waste Report Chart
+    const wasteCtx = document.getElementById('wasteReportChart').getContext('2d');
+    new Chart(wasteCtx, {
+        type: 'line',
+        data: {
+            labels: @json($months),
+            datasets: [
+                {
+                    label: 'Pending',
+                    data: @json($pendingData),
+                    borderColor: '#F59E0B',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    fill: true,
+                },
+                {
+                    label: 'In Progress',
+                    data: @json($inProgressData),
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                },
+                {
+                    label: 'Resolved',
+                    data: @json($resolvedData),
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                },
+                {
+                    label: 'Rejected',
+                    data: @json($rejectedData),
+                    borderColor: '#EF4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    fill: true,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Waste Report Status per Month'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
                 }
             }
         }

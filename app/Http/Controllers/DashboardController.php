@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\User;
 use App\Models\PickupRequest;
 use App\Models\DelayReport;
+use App\Models\WasteReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -110,6 +111,23 @@ class DashboardController extends Controller
                 $statusCompleted[] = $completed;
             }
 
+            $totalWasteReports = WasteReport::count();
+            $pendingWasteReports = WasteReport::where('status', 'pending')->count();
+            $inProgressWasteReports = WasteReport::where('status', 'in_progress')->count();
+            $resolvedWasteReports = WasteReport::where('status', 'resolved')->count();
+            $rejectedWasteReports = WasteReport::where('status', 'rejected')->count();
+
+            $pendingData = [];
+            $inProgressData = [];
+            $resolvedData = [];
+            $rejectedData = [];
+            foreach (range(1, 12) as $month) {
+                $pendingData[] = WasteReport::where('status', 'pending')->whereMonth('created_at', $month)->count();
+                $inProgressData[] = WasteReport::where('status', 'in_progress')->whereMonth('created_at', $month)->count();
+                $resolvedData[] = WasteReport::where('status', 'resolved')->whereMonth('created_at', $month)->count();
+                $rejectedData[] = WasteReport::where('status', 'rejected')->whereMonth('created_at', $month)->count();
+            }
+
             return view('dashboard.index', compact(
                 'articles',
                 'pickupRequests',
@@ -136,11 +154,60 @@ class DashboardController extends Controller
                 'totalDelayReports',
                 'pendingDelayReports',
                 'inProgressDelayReports',
-                'resolvedDelayReports'
+                'resolvedDelayReports',
+                'totalWasteReports',
+                'pendingWasteReports',
+                'inProgressWasteReports',
+                'resolvedWasteReports',
+                'rejectedWasteReports',
+                'pendingData',
+                'inProgressData',
+                'resolvedData',
+                'rejectedData'
             ));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return redirect()->back()->with('error', 'Failed to load dashboard.');
         }
+    }
+
+    public function wasteReportDashboard()
+    {
+        // Statistik
+        $totalWasteReports = WasteReport::count();
+        $pendingWasteReports = WasteReport::where('status', 'pending')->count();
+        $inProgressWasteReports = WasteReport::where('status', 'in_progress')->count();
+        $resolvedWasteReports = WasteReport::where('status', 'resolved')->count();
+        $rejectedWasteReports = WasteReport::where('status', 'rejected')->count();
+
+        // Data chart per bulan
+        $months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        $pendingData = [];
+        $inProgressData = [];
+        $resolvedData = [];
+        $rejectedData = [];
+
+        foreach (range(1, 12) as $month) {
+            $pendingData[] = WasteReport::where('status', 'pending')->whereMonth('created_at', $month)->count();
+            $inProgressData[] = WasteReport::where('status', 'in_progress')->whereMonth('created_at', $month)->count();
+            $resolvedData[] = WasteReport::where('status', 'resolved')->whereMonth('created_at', $month)->count();
+            $rejectedData[] = WasteReport::where('status', 'rejected')->whereMonth('created_at', $month)->count();
+        }
+
+        return view('dashboard.waste-report', compact(
+            'totalWasteReports',
+            'pendingWasteReports',
+            'inProgressWasteReports',
+            'resolvedWasteReports',
+            'rejectedWasteReports',
+            'months',
+            'pendingData',
+            'inProgressData',
+            'resolvedData',
+            'rejectedData'
+        ));
     }
 }

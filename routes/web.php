@@ -16,6 +16,7 @@ use App\Http\Controllers\AdminPickupRequestController;
 use App\Http\Controllers\DelayReportController;
 use App\Http\Controllers\TpsTpaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserDashboardController;
 
 //dashboard
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -138,3 +139,9 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+});
+
+Route::get('/admin/waste-report-dashboard', [DashboardController::class, 'wasteReportDashboard'])->name('admin.waste-report.dashboard');

@@ -18,10 +18,20 @@ return new class extends Migration
             $table->timestamp('pickup_time')->nullable();
             $table->timestamps();
         });
+
+        Schema::table('pickup_requests', function (Blueprint $table) {
+            $table->unsignedBigInteger('collection_point_id')->nullable()->after('user_id');
+            // Jika ingin relasi foreign key:
+            // $table->foreign('collection_point_id')->references('id')->on('collection_points')->onDelete('set null');
+        });
     }
 
     public function down()
     {
         Schema::dropIfExists('pickup_requests');
+
+        Schema::table('pickup_requests', function (Blueprint $table) {
+            $table->dropColumn('collection_point_id');
+        });
     }
 }; 

@@ -27,6 +27,9 @@
             
             <div class="d-flex gap-2">
                 @auth
+                    <a href="{{ route('user.dashboard') }}" class="btn btn-light me-2">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
                     <a href="{{ route('pickup.create') }}" class="btn btn-light me-2">
                         <i class="bi bi-truck"></i> Request Pickup
                     </a>
