@@ -17,8 +17,6 @@
     <link href="{{ asset('images/login.png') }}" rel="icon" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @theme {
@@ -34,15 +32,15 @@
             }
         }
     </style>
-
 </head>
 
-<body>
+<body class="font-poppins">
     <div class="w-full min-h-screen flex flex-row">
-        {{-- LEFT SIDE --}}
+        {{-- LEFT SIDEBAR --}}
         @include('partial.menuadmin')
 
         <div class="w-16/17 min-h-screen flex flex-col bg-background-gray">
+            {{-- TOP NAV --}}
             <div class="w-full py-6 px-10 bg-white flex flex-row justify-end items-center gap-x-5 mb-6 shadow-md">
                 <div class="h-[100%] border-r-2 border-border-gray"></div>
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
@@ -59,7 +57,10 @@
                 </button>
             </div>
 
-            @yield('content')
+            {{-- MAIN CONTENT --}}
+            <div class="flex-1 px-10 py-6 overflow-auto">
+                @yield('content')
+            </div>
 
             <!-- Dropdown menu -->
             <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-35">
@@ -74,5 +75,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
-
 </html>
