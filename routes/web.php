@@ -7,7 +7,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\PickupRequestController;
 use App\Http\Controllers\WasteReportController;
+use App\Http\Controllers\WasteCollectionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
@@ -80,9 +82,13 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Laporan Sampah dan TPS/TPA Routes
+// Laporan Sampah (already matches the navbar's 'laporan' route)
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
     Route::resource('tps-tpa', TpsTpaController::class);
+
+    // Add profile route for the "Pengelola" dropdown
+    Route::get('/pengelola/profile', [ProfileController::class, 'show'])->name('profile');
 });
 
 // Waste Reports Routes
@@ -96,4 +102,12 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
+});
+
+// Waste Collection Routes (renamed to match navbar's 'waste-collection')
+// Add this inside the waste collection routes group
+Route::middleware('checkRole:pengelola')->group(function () {
+    Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('waste-collection');
+    Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
+    Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });
