@@ -97,6 +97,9 @@ Route::middleware(['auth'])->group(function () {
 // Laporan Sampah (already matches the navbar's 'laporan' route)
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
+    Route::put('/laporan/{id}', [WasteReportController::class, 'laporanUpdate'])->name('laporan.update');
+    Route::get('/laporan/report-delay', [WasteReportController::class, 'laporanReportDelay'])->name('laporan.report-delay');
+    Route::put('/laporan/report-delay/{id}', [WasteReportController::class, 'laporanReportDelayUpdate'])->name('laporan.report-delay.update');
     // Add profile route for the "Pengelola" dropdown
     Route::get('/pengelola/profile', [ProfileController::class, 'show'])->name('profile');
 });
@@ -111,8 +114,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
-        Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])
-            ->name('waste-reports.update-with-collection');
     });
 });
 

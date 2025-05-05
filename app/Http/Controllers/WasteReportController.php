@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DelayReport;
 use App\Models\WasteReport;
-use App\Models\TpsTpa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class WasteReportController extends Controller
@@ -180,56 +181,56 @@ class WasteReportController extends Controller
     public function laporan()
     {
         $wasteReports = WasteReport::with('user')->latest()->get();
-        $tpsPoints = TpsTpa::all(); // Get all TPS/TPA locations
-        return view('Report_sampah.LapSampah', compact('wasteReports','tpsPoints'));
+        return view('Report_sampah.LapSampah', compact('wasteReports'));
     }
 
-    /**
-     * Update status and create waste collection record.
-     */
-    public function updateWithCollection(Request $request, $wasteReportId)
+    public function laporanUpdate(Request $request, $id)
     {
         $validated = $request->validate([
-            'location' => 'required|string',
-            'total_waste' => 'required|numeric',
-            'type' => 'required|string',
-            'status' => 'required|string|in:pending,in_progress,resolved',
+            'status' => 'required',
         ]);
 
-        // Find the waste report
-        $wasteReport = WasteReport::findOrFail($wasteReportId);
+        $report = WasteReport::where('id', $id)->first();
 
-        // 1. Update the waste report status
-        $wasteReport->update([
-            'status' => $validated['status']
+        if (!$report) {
+            return redirect()->route('laporan')
+                ->with('error', 'Laporan tidak ditemukan!');
+        }
+
+        WasteReport::where('id', $id)->update([
+            'status' => $validated['status'],
         ]);
 
-        // 2. Find or create the collection point
-        $collectionPoint = \App\Models\CollectionPoint::firstOrCreate(
-            ['name' => $validated['location'], 'type' => $validated['type']],
-            [
-                'name' => $validated['location'],
-                'type' => $validated['type'],
-                'lat' => 0, // Default values
-                'lng' => 0, // Default values
-                'description' => 'Auto-created from waste report'
-            ]
-        );
+        return redirect()->route('laporan')
+            ->with('success', 'Status laporan berhasil diperbarui!');
+    }
 
-        // 3. Create the waste collection record
-        $wasteCollection = new \App\Models\WasteCollection([
-            'amount_kg' => $validated['total_waste'],
-            'collection_point_id' => $collectionPoint->id,
-            'location' => $validated['location'],
-            'type' => $validated['type'],
-            'status' => $validated['status'],  // Add the status from the form
-            'collection_date' => now(),
-        ]);
-        $wasteCollection->save();
+    public function laporanReportDelay()
+    {
+        $reports = DelayReport::orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Status updated and collection recorded successfully'
+        return view('Report_sampah.LapSampahDelay', compact('reports'));
+    }
+
+    public function laporanReportDelayUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,in_progress,resolved',
         ]);
+
+        $report = DelayReport::where('id', $id)->first();
+
+        if (!$report) {
+            return redirect()->route('laporan.report-delay')
+                ->with('error', 'Laporan tidak ditemukan!');
+        }
+
+        DelayReport::where('id', $id)->update([
+            'status' => $validated['status'],
+        ]);
+
+        return redirect()->route('laporan.report-delay')
+            ->with('success', 'Status laporan berhasil diperbarui!');
     }
 }
