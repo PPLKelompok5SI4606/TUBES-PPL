@@ -13,6 +13,12 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
+use App\Http\Controllers\DelayReportController;
+use App\Http\Controllers\TpsTpaController;
+use App\Http\Controllers\DashboardController;
+
+//dashboard
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
 // Redirect ke /home
@@ -20,14 +26,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/articles', [ArticleController::class, 'listArticles']);
 Route::get('/article/{id}', [ArticleController::class, 'showArticle'])->name('article.show');
-
 Route::get('/map', [MapController::class, 'index'])->name('map');
 
 Route::get('/facilities', [MapController::class, 'index'])->name('peta.index');
 
+
+
 // 🔐 Hanya untuk user yang sudah login
 Route::middleware('checkRole:admin')->group(function () {
     Route::get('/admin/home', [ArticleController::class, 'index'])->name('admin.home');
+    Route::get('/admin/sampah', [PickupRequestController::class, 'sampah'])->name('admin.sampah');
 
     Route::post('/articles', [ArticleController::class, 'store']);
 
@@ -41,6 +49,17 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::get('/admin/pickup-requests', [AdminPickupRequestController::class, 'index'])->name('admin.pickup-requests');
     Route::get('/admin/pickup-requests/{pickupRequest}', [AdminPickupRequestController::class, 'show'])->name('admin.pickup-requests.show');
     Route::put('/admin/pickup-requests/{pickupRequest}', [AdminPickupRequestController::class, 'update'])->name('admin.pickup-requests.update');
+
+    // TPS/TPA Management Routes
+    Route::prefix('admin/tps-tpa')->group(function () {
+        Route::get('/', [TpsTpaController::class, 'index'])->name('tps-tpa.index');
+        Route::get('/create', [TpsTpaController::class, 'create'])->name('tps-tpa.create');
+        Route::post('/', [TpsTpaController::class, 'store'])->name('tps-tpa.store');
+        Route::get('/{tpsTpa}/edit', [TpsTpaController::class, 'edit'])->name('tps-tpa.edit');
+        Route::put('/{tpsTpa}', [TpsTpaController::class, 'update'])->name('tps-tpa.update');
+        Route::delete('/{tpsTpa}', [TpsTpaController::class, 'destroy'])->name('tps-tpa.destroy');
+        Route::get('/map', [TpsTpaController::class, 'map'])->name('tps-tpa.map');
+    });
 });
 
 Route::match(['get', 'post'], '/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
@@ -74,10 +93,10 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+// Laporan Sampah dan TPS/TPA Routes
 // Laporan Sampah (already matches the navbar's 'laporan' route)
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
-
     // Add profile route for the "Pengelola" dropdown
     Route::get('/pengelola/profile', [ProfileController::class, 'show'])->name('profile');
 });
@@ -94,6 +113,15 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
     });
 });
+
+// Delay Reports Routes
+Route::prefix('delay-reports')->group(function () {
+    Route::get('/', [DelayReportController::class, 'index'])->name('delay-reports.index');
+    Route::get('/create', [DelayReportController::class, 'create'])->name('delay-reports.create');
+    Route::post('/', [DelayReportController::class, 'store'])->name('delay-reports.store');
+    Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
+    Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
+    });
 
 // Waste Collection Routes (renamed to match navbar's 'waste-collection')
 // Add this inside the waste collection routes group

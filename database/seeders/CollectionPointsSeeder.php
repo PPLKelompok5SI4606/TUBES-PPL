@@ -98,6 +98,34 @@ class CollectionPointsSeeder extends Seeder
                 'lat' => -6.8902,
                 'lng' => 107.6587,
                 'description' => 'Serves the northeastern residential areas'
+            ],
+            [
+                'name' => 'TPS 3R Antapani',
+                'type' => 'TPS',
+                'lat' => -6.9159655091214525,
+                'lng' => 107.66553367449237,
+                'description' => 'TPS 3R in Antapani area, focusing on waste reduction and recycling'
+            ],
+            [
+                'name' => 'TPA Sarimukti',
+                'type' => 'TPA',
+                'lat' => -6.800530132887372, 
+                'lng' => 107.34960880337408,
+                'description' => 'TPA in Sarimukti, a landfill site for waste disposal'
+            ],
+            [
+                'name' => 'TPS Babakan Sari',
+                'type' => 'TPS',
+                'lat' => -6.9221548792371745, 
+                'lng' => 107.64945220762513,
+                'description' => 'TPS in Babakan Sari, a temporary waste collection point'
+            ],
+            [
+                'name' => 'TPS Terpadu Babakan Sari',
+                'type' => 'TPS',
+                'lat' => -6.9210472192059855, 
+                'lng' => 107.6501173985231,
+                'description' => 'Integrated TPS in Babakan Sari, focusing on waste management'
             ]
         ];
 
