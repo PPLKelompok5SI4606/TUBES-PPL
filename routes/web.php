@@ -40,6 +40,17 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::get('/admin/pickup-requests', [AdminPickupRequestController::class, 'index'])->name('admin.pickup-requests');
     Route::get('/admin/pickup-requests/{pickupRequest}', [AdminPickupRequestController::class, 'show'])->name('admin.pickup-requests.show');
     Route::put('/admin/pickup-requests/{pickupRequest}', [AdminPickupRequestController::class, 'update'])->name('admin.pickup-requests.update');
+
+    // TPS/TPA Management Routes
+    Route::prefix('admin/tps-tpa')->group(function () {
+        Route::get('/', [TpsTpaController::class, 'index'])->name('tps-tpa.index');
+        Route::get('/create', [TpsTpaController::class, 'create'])->name('tps-tpa.create');
+        Route::post('/', [TpsTpaController::class, 'store'])->name('tps-tpa.store');
+        Route::get('/{tpsTpa}/edit', [TpsTpaController::class, 'edit'])->name('tps-tpa.edit');
+        Route::put('/{tpsTpa}', [TpsTpaController::class, 'update'])->name('tps-tpa.update');
+        Route::delete('/{tpsTpa}', [TpsTpaController::class, 'destroy'])->name('tps-tpa.destroy');
+        Route::get('/map', [TpsTpaController::class, 'map'])->name('tps-tpa.map');
+    });
 });
 
 Route::match(['get', 'post'], '/admin/logout', [AdminController::class, 'logout'])->name('auth.admin.logout');
@@ -76,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
 // Laporan Sampah dan TPS/TPA Routes
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
-    Route::resource('tps-tpa', TpsTpaController::class);
+    
 });
 
 // Waste Reports Routes
