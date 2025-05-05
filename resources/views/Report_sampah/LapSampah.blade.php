@@ -2,6 +2,7 @@
 <html lang="en">
 <!-- Add this in the head section -->
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Laporan Sampah - Cleansweep')</title>
@@ -314,26 +315,18 @@
             <h2 class="modal-title">Update Status Laporan</h2>
             <form id="updateStatusForm" method="POST">
                 @csrf
-                @method('PUT')
                 <input type="hidden" id="reportId" name="report_id">
                 
                 <!-- Replace the location input with this dropdown -->
                 <div class="form-group">
                     <label for="location">Lokasi Pembuangan</label>
                     <select id="location" name="location" required>
-                      
-    
+                        <option value="">-- Pilih Lokasi --</option>
+                        
                         <!-- TPS Options -->
-                        <option value="TPS Ciroyom">TPS Ciroyom</option>
-                        <option value="TPS Balubur">TPS Balubur</option>
-                        <option value="TPS Cicadas">TPS Cicadas</option>
-                        <option value="TPS Soekarno-Hatta">TPS Soekarno-Hatta</option>
-                        <option value="TPS Cibeunying">TPS Cibeunying</option>
-                        <option value="TPS Cijerah">TPS Cijerah</option>
-                        <option value="TPS Cibiru">TPS Cibiru</option>
-                        <option value="TPS Gedebage">TPS Gedebage</option>
-                        <option value="TPS Leuwigajah">TPS Leuwigajah</option>
-                        <option value="TPS Pasir Impun">TPS Pasir Impun</option>
+                        @foreach($tpsPoints as $site)
+                            <option value="{{ $site->nama }}">{{ $site->nama }} ({{ $site->tipe }})</option>
+                        @endforeach
                     </select>
                 </div>
     
@@ -400,29 +393,24 @@
             e.preventDefault();
             const reportId = document.getElementById('reportId').value;
             const formData = new FormData(this);
-            const statusValue = document.getElementById('status').value;
     
-            fetch(`/waste-reports/${reportId}`, {
+             // Add the CSRF token to the form data
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+    
+            fetch(`/waste-reports/${reportId}/update-with-collection`, {
                 method: 'POST',
                 body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update the status in the table
-                    const statusCell = document.querySelector(`tr[data-report-id="${reportId}"] td:nth-child(5)`);
-                    if (statusCell) {
-                        statusCell.textContent = statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
-                        
-                        // Update status cell styling
-                        statusCell.className = ''; // Remove existing status classes
-                        statusCell.classList.add(`status-${statusValue.replace('_', '-')}`);
-                    }
-                    closeModal();
+                    alert('Status updated and collection recorded successfully!');
+                    window.location.reload(); // Reload to see changes
+                } else {
+                    alert('Failed to update: ' + (data.message || 'Unknown error'));
                 }
             })
             .catch(error => {
@@ -430,6 +418,8 @@
                 alert('Failed to update status. Please try again.');
             });
         });
+        
+        
     </script>
     <!-- Update the footer section -->
     <footer class="bg-success" style="background-color: #81C974 !important; padding: 10px 0; position: fixed; bottom: 0; width: 100%;">

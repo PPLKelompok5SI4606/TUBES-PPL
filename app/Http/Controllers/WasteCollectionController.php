@@ -9,12 +9,9 @@ class WasteCollectionController extends Controller
 {
     public function index()
     {
-        // Get summary: total waste per location
-        $summary = WasteCollection::select('location')
-            ->selectRaw('SUM(amount_kg) as total_waste')
-            ->groupBy('location')
-            ->get();
+        // Get all waste collection records
+        $wasteCollections = WasteCollection::latest()->get();
 
-        return view('waste_collections.index', compact('summary'));
+        return view('waste_collections.index', compact('wasteCollections'));
     }
 }

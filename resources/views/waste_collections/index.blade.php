@@ -190,12 +190,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($summary as $item)
+                @foreach ($wasteCollections as $collection)
                     <tr>
-                        <td class="py-2 px-4 border">{{ $item->collectionPoint->name }}</td>
-                        <td class="py-2 px-4 border">{{ $item->collectionPoint->type }}</td>
-                        <td class="py-2 px-4 border">{{ number_format($item->total_waste, 2) }}</td>
-                        <td class="py-2 px-4 border">{{ $item->status->format('Pending','In Progress','Resolved') }}</td>
+                        <td class="py-2 px-4 border">{{ $collection->location ?? 'N/A' }}</td>
+                        <td class="py-2 px-4 border">{{ $collection->type ?? 'N/A' }}</td>
+                        <td class="py-2 px-4 border">{{ number_format($collection->amount_kg, 2) }}</td>
+                        <td class="py-2 px-4 border">{{ $collection->status ?? 'Completed' }}</td>
                     </tr>
                 @endforeach
             </tbody>

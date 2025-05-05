@@ -12,6 +12,9 @@ class WasteCollection extends Model
     protected $fillable = [
         'amount_kg',
         'collection_point_id',
+        'location',
+        'type',
+        'status',
         'collection_date',
     ];
 
