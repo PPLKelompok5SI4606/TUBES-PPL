@@ -21,6 +21,9 @@
                     <a class="nav-link" href="{{ route('delay-reports.index') }}">Delay Reports</a>
                 </li>
                 <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('waste.*') ? 'active' : '' }}" href="{{ route('waste-record.index') }}">Catatan Sampah</a>
+            </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#about">About</a>
                 </li>
             </ul>
