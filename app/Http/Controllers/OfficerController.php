@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Officer;
-use App\Models\CollectionPoint;
+use App\Models\TpsTpa;
 use Illuminate\Http\Request;
 
 class OfficerController extends Controller
@@ -11,42 +11,30 @@ class OfficerController extends Controller
     public function index()
     {
         $officers = Officer::all();
-        $collectionPoints = CollectionPoint::all();
-        return view('officers.index', compact('officers', 'collectionPoints'));
+        $collectionPoints = TpsTpa::all();
+        return view('Officers.Index', compact('officers', 'collectionPoints'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'area' => 'required',
+            'name' => 'required|string',
+            'area' => 'required|string',
+            'schedule_days' => 'required|string',
+            'phone' => 'required|string',
             'gender' => 'required|in:male,female',
-            'schedule_days' => 'required'
+            'address' => 'required|string',
+            'email' => 'required|email|unique:officers'
         ]);
 
         Officer::create($validated);
-        return redirect()->route('officers.index')->with('success', 'Officer added successfully');
+
+        return redirect()->route('officers.index')
+            ->with('success', 'Petugas berhasil ditambahkan!');
     }
 
     public function show(Officer $officer)
     {
         return response()->json($officer);
-    }
-
-    public function update(Request $request, Officer $officer)
-    {
-        $validated = $request->validate([
-            'name' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'area' => 'required',
-            'gender' => 'required|in:male,female',
-            'schedule_days' => 'required'
-        ]);
-
-        $officer->update($validated);
-        return redirect()->route('officers.index')->with('success', 'Officer updated successfully');
     }
 }

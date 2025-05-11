@@ -8,10 +8,11 @@ class Officer extends Model
 {
     protected $fillable = [
         'name',
-        'phone',
-        'email',
         'area',
+        'schedule_days',
+        'phone',
         'gender',
-        'schedule_days'
+        'email',
+        'address',
     ];
 }

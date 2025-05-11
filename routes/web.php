@@ -16,9 +16,16 @@ use App\Http\Controllers\AdminPickupRequestController;
 use App\Http\Controllers\DelayReportController;
 use App\Http\Controllers\TpsTpaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OfficerController;
 
 //dashboard
+// Add after the existing dashboard route
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+// Add this new route for user dashboard
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
+});
 
 
 // Redirect ke /home
@@ -97,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
 // Laporan Sampah (already matches the navbar's 'laporan' route)
 Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan', [WasteReportController::class, 'laporan'])->name('laporan');
+    Route::get('/laporan/report-delay', [WasteReportController::class, 'reportDelay'])->name('laporan.report-delay');
+    Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('waste-collection');
     // Add profile route for the "Pengelola" dropdown
     Route::get('/pengelola/profile', [ProfileController::class, 'show'])->name('profile');
 });
@@ -131,13 +140,12 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('waste-collection');
     Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
-});
-
-// Add these routes in the admin middleware group
-Route::middleware('checkRole:admin')->group(function () {
+    
     // Officers Routes
     Route::get('/officers', [OfficerController::class, 'index'])->name('officers.index');
     Route::post('/officers', [OfficerController::class, 'store'])->name('officers.store');
     Route::get('/officers/{officer}', [OfficerController::class, 'show'])->name('officers.show');
     Route::put('/officers/{officer}', [OfficerController::class, 'update'])->name('officers.update');
+    Route::delete('/officers/{officer}', [OfficerController::class, 'destroy'])->name('officers.destroy');
 });
+
