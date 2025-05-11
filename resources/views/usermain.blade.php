@@ -143,6 +143,15 @@
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Detailed history</li>
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Status notifications</li>
                             </ul>
+                            @auth
+                                <a href="{{ route('waste-reports.create') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-cursor"></i> Laporkan
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-person-plus"></i> Sign Up to Report
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -182,9 +191,11 @@
                             </div>
                             <p class="card-text">Access comprehensive information about waste management, including pickup schedules and facility capacities.</p>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pickup schedules</li>
-                                <a href="{{route('peta.index')}}">Facility capacities</a>
-                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Waste guidelines</li>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pickup schedules</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><a href="{{route('peta.index')}}">Facilities map</a></li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Facility capacities</li>
+                                </ul>
                             </ul>
                         </div>
                     </div>

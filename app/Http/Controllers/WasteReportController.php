@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DelayReport;
 use App\Models\WasteReport;
-use App\Models\TpsTpa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class WasteReportController extends Controller
@@ -177,16 +178,6 @@ class WasteReportController extends Controller
             ->with('success', 'Laporan sampah berhasil dihapus!');
     }
 
-    public function laporan()
-    {
-        $wasteReports = WasteReport::with('user')->latest()->get();
-        $tpsPoints = TpsTpa::all(); // Get all TPS/TPA locations
-        return view('Report_sampah.LapSampah', compact('wasteReports','tpsPoints'));
-    }
-
-    /**
-     * Update status and create waste collection record.
-     */
     public function updateWithCollection(Request $request, $wasteReportId)
     {
         $validated = $request->validate([
@@ -231,5 +222,62 @@ class WasteReportController extends Controller
             'success' => true,
             'message' => 'Status updated and collection recorded successfully'
         ]);
+    }
+
+    public function laporan()
+    {
+        $wasteReports = WasteReport::with('user')->latest()->get();
+        $tpsPoints = \App\Models\TpsTpa::all();
+        return view('Report_sampah.LapSampah', compact('wasteReports', 'tpsPoints'));
+    }
+
+    public function laporanUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required',
+        ]);
+
+        $report = WasteReport::where('id', $id)->first();
+
+        if (!$report) {
+            return redirect()->route('laporan')
+                ->with('error', 'Laporan tidak ditemukan!');
+        }
+
+        WasteReport::where('id', $id)->update([
+            'status' => $validated['status'],
+        ]);
+
+        return redirect()->route('laporan')
+            ->with('success', 'Status laporan berhasil diperbarui!');
+    }
+
+    public function laporanReportDelay()
+    {
+        $reports = DelayReport::orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('Report_sampah.LapSampahDelay', compact('reports'));
+    }
+
+    public function laporanReportDelayUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,in_progress,resolved',
+        ]);
+
+        $report = DelayReport::where('id', $id)->first();
+
+        if (!$report) {
+            return redirect()->route('laporan.report-delay')
+                ->with('error', 'Laporan tidak ditemukan!');
+        }
+
+        DelayReport::where('id', $id)->update([
+            'status' => $validated['status'],
+        ]);
+
+        return redirect()->route('laporan.report-delay')
+            ->with('success', 'Status laporan berhasil diperbarui!');
     }
 }

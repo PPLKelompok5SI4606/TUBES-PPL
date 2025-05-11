@@ -37,14 +37,19 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="jenis_sampah" class="form-label">Jenis Sampah</label>
-                        <select class="form-select @error('jenis_sampah') is-invalid @enderror" name="jenis_sampah"
-                            id="jenis_sampah">
-                            <option value="" disabled selected>Pilih jenis sampah</option>
-                            <option value="TPA" {{ old('jenis_sampah') == 'TPA' ? 'selected' : '' }}>TPA (Tempat
-                                Pembuangan Akhir)</option>
-                            <option value="TPS" {{ old('jenis_sampah') == 'TPS' ? 'selected' : '' }}>TPS (Tempat
-                                Pembuangan Sementara)</option>
+                        <label for="jenis_sampah" class="form-label">Jenis Sampah (Lokasi TPS/TPA)</label>
+                        <select name="jenis_sampah" id="jenis_sampah" class="form-select" required>
+                            <option value="">Pilih TPS/TPA</option>
+                            <optgroup label="TPS">
+                                @foreach($tpsPoints as $point)
+                                    <option value="{{ $point->id }}">TPS - {{ $point->name }}</option>
+                                @endforeach
+                            </optgroup>
+                            <optgroup label="TPA">
+                                @foreach($tpaPoints as $point)
+                                    <option value="{{ $point->id }}">TPA - {{ $point->name }}</option>
+                                @endforeach
+                            </optgroup>
                         </select>
                         @error('jenis_sampah')
                         <div class="invalid-feedback">{{ $message }}</div>
