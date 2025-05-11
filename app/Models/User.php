@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PickupRequest::class, 'admin_id');
     }
+
+    public function wasteRecords()
+    {
+        return $this->hasMany(WasteRecord::class);
+    }
 }
