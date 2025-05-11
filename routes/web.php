@@ -132,3 +132,12 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });
+
+// Add these routes in the admin middleware group
+Route::middleware('checkRole:admin')->group(function () {
+    // Officers Routes
+    Route::get('/officers', [OfficerController::class, 'index'])->name('officers.index');
+    Route::post('/officers', [OfficerController::class, 'store'])->name('officers.store');
+    Route::get('/officers/{officer}', [OfficerController::class, 'show'])->name('officers.show');
+    Route::put('/officers/{officer}', [OfficerController::class, 'update'])->name('officers.update');
+});
