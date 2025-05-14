@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class WasteRecordController extends Controller
 {
-    // Remove the constructor with middleware
-    /* 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    */
-
     /**
      * Display a listing of the resource.
      */
@@ -25,17 +17,18 @@ class WasteRecordController extends Controller
             ->orderBy('date', 'desc');
 
         // Filter berdasarkan tanggal jika ada
-        if ($request->filled('start_date')) {
-            $query->where('date', '>=', $request->start_date);
+        if ($request->filled('date')) {
+            $query->whereDate('date', '=', $request->date);
         }
 
-        if ($request->filled('end_date')) {
-            $query->where('date', '<=', $request->end_date);
+        // Filter berdasarkan kategori jika ada
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
         }
 
-        $records = $query->paginate(10);
-        
-        return view('waste-record.index', compact('records'));
+        $wasteRecords = $query->paginate(10);
+
+        return view('waste-record.index', compact('wasteRecords'));
     }
 
     /**
