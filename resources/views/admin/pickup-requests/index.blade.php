@@ -15,6 +15,12 @@
                         Address
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Waste Type
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Waste Quantity
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Description
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -39,6 +45,12 @@
                     </td>
                     <td class="px-6 py-4">
                         {{ Str::limit($request->address, 30) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ Str::limit($request->jenis_sampah, 30) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ Str::limit($request->jumlah_sampah, 30) }}
                     </td>
                     <td class="px-6 py-4">
                         {{ Str::limit($request->description, 30) }}
