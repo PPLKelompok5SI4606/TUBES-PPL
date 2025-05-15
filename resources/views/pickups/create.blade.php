@@ -37,26 +37,6 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="jenis_sampah" class="form-label">Jenis Sampah (Lokasi TPS/TPA)</label>
-                        <select name="jenis_sampah" id="jenis_sampah" class="form-select" required>
-                            <option value="">Pilih TPS/TPA</option>
-                            <optgroup label="TPS">
-                                @foreach($tpsPoints as $point)
-                                    <option value="{{ $point->id }}">TPS - {{ $point->name }}</option>
-                                @endforeach
-                            </optgroup>
-                            <optgroup label="TPA">
-                                @foreach($tpaPoints as $point)
-                                    <option value="{{ $point->id }}">TPA - {{ $point->name }}</option>
-                                @endforeach
-                            </optgroup>
-                        </select>
-                        @error('jenis_sampah')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
                         <label for="pickup_time" class="form-label">Preferred Pickup Time</label>
                         <input type="datetime-local" class="form-control @error('pickup_time') is-invalid @enderror"
                             id="pickup_time" name="pickup_time" value="{{ old('pickup_time') }}">

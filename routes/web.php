@@ -118,6 +118,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
         // Add new route for updating with collection
         Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])->name('waste-reports.update-with-collection');
+        Route::post('/waste-reports/{wasteReport}/update-with-collection', 
+            [App\Http\Controllers\WasteReportController::class, 'updateWithCollection'])
+            ->name('waste-reports.update-with-collection');
     });
 });
 
