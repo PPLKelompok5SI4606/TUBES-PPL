@@ -217,7 +217,7 @@
                     <p id="detail-email"></p>
                 </div>
                 <div class="mb-3">
-                    <strong>Alamat:</strong>
+                    <strong>Alamat Petugas:</strong>
                     <p id="detail-address"></p>
                 </div>
             </div>
