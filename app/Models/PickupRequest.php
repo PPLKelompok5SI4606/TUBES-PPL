@@ -13,9 +13,10 @@ class PickupRequest extends Model
         'user_id',
         'address',
         'description',
-        'jenis_sampah',
         'status',
         'admin_id',
+        'jenis_sampah',
+        'jumlah_sampah',
         'pickup_time',
         'admin_notes'
     ];
