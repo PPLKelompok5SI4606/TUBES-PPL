@@ -13,11 +13,13 @@ class WasteRecord extends Model
         'user_id',
         'date',
         'category',
+        'weight',
         'description',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'weight' => 'integer',
     ];
 
     /**

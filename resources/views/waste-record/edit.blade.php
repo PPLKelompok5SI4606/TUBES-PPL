@@ -150,6 +150,20 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label for="weight" class="form-label">Berat (Kantong)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control @error('weight') is-invalid @enderror" id="weight" name="weight" value="{{ old('weight', $wasteRecord->weight ?? 1) }}" min="1" step="1" required>
+                                        <span class="input-group-text">kantong</span>
+                                    </div>
+                                    <div class="form-text">Masukkan jumlah kantong sampah yang dihasilkan</div>
+                                    @error('weight')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
                                     <label for="description" class="form-label">Deskripsi (Opsional)</label>
                                     <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" placeholder="Misalnya: Sisa makanan, botol plastik, baterai bekas, dll">{{ old('description', $wasteRecord->description) }}</textarea>
                                     @error('description')

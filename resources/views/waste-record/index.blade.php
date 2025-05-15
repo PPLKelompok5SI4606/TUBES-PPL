@@ -4,99 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>CleanSweep - Riwayat Sampah</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <title>@yield('title', 'Help Keep Our Homes Clean')</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="{{ asset('images/login.png') }}" rel="icon" type="image/png">
+    
     <style>
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        }
-        .dropdown-item {
-            padding: 0.5rem 1rem;
-        }
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #4B7F52;
-        }
-        .btn-link {
-            color: white;
-            text-decoration: none;
-        }
-        .btn-link:hover {
-            color: rgba(255, 255, 255, 0.8);
-        }
-        .action-btns {
+        .min-h-screen {
+            min-height: 100vh;
             display: flex;
-            gap: 5px;
+            flex-direction: column;
         }
-        .action-btns button {
-            border-radius: 8px;
-            padding: 8px 12px;
+        .content {
+            flex: 1;
         }
-        .btn-outline-primary {
-            color: #0d6efd;
-            border-color: #0d6efd;
-        }
-        .btn-outline-primary:hover {
-            background-color: #0d6efd;
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                              url('{{ asset('images/cleanup-bg.jpg') }}');
+            background-size: cover;
+            background-position: center;
             color: white;
+            padding: 100px 0;
         }
-        .btn-outline-danger {
-            color: #dc3545;
-            border-color: #dc3545;
+        .service-icon {
+            color: #4CAF50;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
+        .btn-primary {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+            border-color: #45a049;
+        }
+        .bg-primary {
+            background-color: #4CAF50 !important;
+        }
+        .text-success {
+            color: #4CAF50 !important;
+        }
+        .bg-success {
+            background-color: #4CAF50 !important;
+        }
+        .border-success {
+            border-color: #4CAF50 !important;
+        }
+        .hover-opacity:hover {
+            opacity: 0.8;
+        }
+        .card {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-success {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        .btn-success:hover {
+            background-color: #45a049;
+            border-color: #45a049;
         }
     </style>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4CAF50;">
-    <div class="container">
-        <a class="navbar-brand" href="{{ route('home') }}">CleanSweep</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/articles">Articles</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('waste-reports.index') }}">Waste Reports</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('delay-reports.index') }}">Delay Reports</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-            </ul>
-            <div class="d-flex gap-2">
-                @auth
-                    <a href="{{ route('user.dashboard') }}" class="btn btn-light me-2"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                    <a href="{{ route('pickup.create') }}" class="btn btn-light me-2"><i class="bi bi-truck"></i> Request Pickup</a>
-                    <div class="dropdown">
-                        <button class="btn btn-link text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            {{ Auth::user()->name }}
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ route('pickup.index') }}">My Pickups</a></li>
-                            <li><a class="dropdown-item" href="{{ route('waste-reports.index') }}">My Waste Reports</a></li>
-                            <li><a class="dropdown-item" href="{{ route('delay-reports.index') }}">My Delay Reports</a></li>
-                            <li><a class="dropdown-item" href="{{ route('waste-record.index') }}">Waste Record</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form method="POST" action="{{ route('auth.user.logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i> Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
-                    <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
-                @endauth
-            </div>
-        </div>
-    </div>
-</nav>
+<body class="min-h-screen">
+    @include('partial.navbar')
 
 <main class="py-4">
     <div class="container">
@@ -152,6 +127,7 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Kategori</th>
+                                            <th>Berat (Kantong)</th>
                                             <th>Deskripsi</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -167,6 +143,7 @@
                                                         {{ $wasteRecord->category_name }}
                                                     </span>
                                                 </td>
+                                                <td>{{ $wasteRecord->weight }} kantong</td>
                                                 <td>{{ $wasteRecord->description ?? '-' }}</td>
                                                 <td>
                                                     <div class="action-btns">
