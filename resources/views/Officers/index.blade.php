@@ -86,8 +86,6 @@
                             <th>No</th>
                             <th>Nama Petugas</th>
                             <th>Area Tugas</th>
-                            <th>Hari Tugas</th>
-                            <th>Kontak</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -97,8 +95,6 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $officer->name }}</td>
                             <td>{{ $officer->area }}</td>
-                            <td>{{ $officer->schedule_days }}</td>
-                            <td>{{ $officer->phone }}</td>
                             <td>
                                 <button class="btn btn-info btn-sm" onclick="showDetails({{ $officer->id }})">
                                     <i class="bi bi-eye"></i> Lihat Detail
@@ -209,12 +205,20 @@
                     <p id="detail-area"></p>
                 </div>
                 <div class="mb-3">
-                    <strong>Jadwal:</strong>
+                    <strong>Hari Tugas:</strong>
                     <p id="detail-schedule"></p>
                 </div>
                 <div class="mb-3">
-                    <strong>Kontak:</strong>
-                    <p id="detail-contact"></p>
+                    <strong>No. Telepon:</strong>
+                    <p id="detail-phone"></p>
+                </div>
+                <div class="mb-3">
+                    <strong>Email:</strong>
+                    <p id="detail-email"></p>
+                </div>
+                <div class="mb-3">
+                    <strong>Alamat:</strong>
+                    <p id="detail-address"></p>
                 </div>
             </div>
         </div>
@@ -222,7 +226,6 @@
 </div>
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     window.openAddModal = function() {
@@ -237,7 +240,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('detail-name').textContent = data.name;
                 document.getElementById('detail-area').textContent = data.area;
                 document.getElementById('detail-schedule').textContent = data.schedule_days;
-                document.getElementById('detail-contact').textContent = `${data.phone} | ${data.email}`;
+                document.getElementById('detail-phone').textContent = data.phone;
+                document.getElementById('detail-email').textContent = data.email;
+                document.getElementById('detail-address').textContent = data.address;
                 var detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
                 detailModal.show();
             });

@@ -6,22 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('pickup_requests', function (Blueprint $table) {
-            $table->unsignedBigInteger('collection_point_id')->nullable()->after('user_id');
+            // Check if column exists before adding
+            if (!Schema::hasColumn('pickup_requests', 'collection_point_id')) {
+                $table->unsignedBigInteger('collection_point_id')->nullable();
+                $table->foreign('collection_point_id')
+                    ->references('id')
+                    ->on('collection_points')
+                    ->onDelete('set null');
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('pickup_requests', function (Blueprint $table) {
+            $table->dropForeign(['collection_point_id']);
             $table->dropColumn('collection_point_id');
         });
     }
