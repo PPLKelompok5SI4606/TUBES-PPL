@@ -20,6 +20,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('delay-reports.index') }}">Delay Reports</a>
                 </li>
+            </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#about">About</a>
                 </li>
@@ -41,6 +42,7 @@
                             <li><a class="dropdown-item" href="{{ route('pickup.index') }}">My Pickups</a></li>
                             <li><a class="dropdown-item" href="{{ route('waste-reports.index') }}">My Waste Reports</a></li>
                             <li><a class="dropdown-item" href="{{ route('delay-reports.index') }}">My Delay Reports</a></li>
+                            <li><a class="dropdown-item" href="{{ route('waste-record.index') }}">Waste Record</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('auth.user.logout') }}">

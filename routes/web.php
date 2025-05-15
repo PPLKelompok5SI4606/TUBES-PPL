@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPickupRequestController;
 use App\Http\Controllers\DelayReportController;
 use App\Http\Controllers\TpsTpaController;
+use App\Http\Controllers\WasteRecordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OfficerController;
 
@@ -148,4 +149,16 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::put('/officers/{officer}', [OfficerController::class, 'update'])->name('officers.update');
     Route::delete('/officers/{officer}', [OfficerController::class, 'destroy'])->name('officers.destroy');
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+});
+
+// fitur pencatatan sampah
+Route::middleware(['auth'])->group(function () {
+    Route::resource('waste-record', WasteRecordController::class);
+});
+
+Route::get('/admin/waste-report-dashboard', [DashboardController::class, 'wasteReportDashboard'])->name('admin.waste-report.dashboard');
 
