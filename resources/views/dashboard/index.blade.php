@@ -125,7 +125,7 @@
         </div>
 
         <!-- Delay Reports Stats -->
-        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+        <!-- <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Delay Report Status</h2>
             <div class="space-y-4">
                 @foreach([
@@ -147,7 +147,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

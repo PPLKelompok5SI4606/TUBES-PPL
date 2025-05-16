@@ -36,6 +36,8 @@
                                     <tr>
                                         <th>Tanggal</th>
                                         <th>Alamat</th>
+                                        <th>Jenis Sampah</th>
+                                        <th>Jumlah Sampah</th>
                                         <th>Status</th>
                                         <th>Waktu Pengambilan</th>
                                         <th>Aksi</th>
@@ -46,6 +48,20 @@
                                         <tr>
                                             <td>{{ $request->created_at->format('d M Y, H:i') }}</td>
                                             <td>{{ Str::limit($request->address, 30) }}</td>
+                                            <td>
+                                                @if($request->jenis_sampah)
+                                                    <span class="badge bg-primary">{{ $request->jenis_sampah }}</span>
+                                                @else
+                                                    <span class="text-muted">Tidak ditentukan</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($request->jumlah_sampah)
+                                                    {{ $request->jumlah_sampah }}
+                                                @else
+                                                    <span class="text-muted">Tidak ditentukan</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if($request->status == 'pending')
                                                     <span class="badge bg-warning">Menunggu</span>
@@ -85,4 +101,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

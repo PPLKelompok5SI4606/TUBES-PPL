@@ -45,6 +45,16 @@
                     </div>
 
                     <div class="mb-4">
+                        <h3 class="h6 text-success">Jenis Sampah</h3>
+                        <p class="mb-0">{{ $pickupRequest->jenis_sampah }}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h6 text-success">Jumlah Sampah</h3>
+                        <p class="mb-0">{{ $pickupRequest->jumlah_sampah }}</p>
+                    </div>
+
+                    <div class="mb-4">
                         <h3 class="h6 text-success">Deskripsi Sampah</h3>
                         <p class="mb-0">{{ $pickupRequest->description }}</p>
                     </div>

@@ -47,6 +47,7 @@ class WasteRecordController extends Controller
         $validated = $request->validate([
             'date' => 'required|date',
             'category' => 'required|in:organik,anorganik,b3',
+            'weight' => 'required|integer|min:1',
             'description' => 'nullable|string|max:255',
         ]);
 
@@ -82,6 +83,7 @@ class WasteRecordController extends Controller
         $validated = $request->validate([
             'date' => 'required|date',
             'category' => 'required|in:organik,anorganik,b3',
+            'weight' => 'required|integer|min:1',
             'description' => 'nullable|string|max:255',
         ]);
 
