@@ -195,6 +195,20 @@ class WasteReportController extends Controller
             'status' => $validated['status']
         ]);
 
+        $tpsTpa = \App\Models\TpsTpa::where('nama', $validated['location'])->first();
+
+        if ($tpsTpa) {
+            $wasteInCubicMeters = $validated['total_waste'] / 350; // Convert kg to m³
+            $newFilledCapacity = $tpsTpa->kapasitas_terisi + $wasteInCubicMeters;
+            $tpsTpa->kapasitas_terisi = $tpsTpa->kapasitas_terisi + $wasteInCubicMeters;
+            if ($newFilledCapacity > $tpsTpa->kapasitas_total) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot update: The specified amount would exceed the total capacity of this TPS/TPA.'
+                ], 422);
+        }
+            $tpsTpa->save();
+        }
         // 2. Find or create the collection point
         $collectionPoint = \App\Models\CollectionPoint::firstOrCreate(
             ['name' => $validated['location'], 'type' => $validated['type']],
@@ -222,6 +236,7 @@ class WasteReportController extends Controller
             'success' => true,
             'message' => 'Status updated and collection recorded successfully'
         ]);
+        
     }
 
     public function laporan()

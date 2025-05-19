@@ -118,6 +118,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
         // Add new route for updating with collection
         Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])->name('waste-reports.update-with-collection');
+        Route::post('/waste-reports/{wasteReport}/update-with-collection', 
+            [App\Http\Controllers\WasteReportController::class, 'updateWithCollection'])
+            ->name('waste-reports.update-with-collection');
     });
 });
 
@@ -141,9 +144,10 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-});
+//user dashboard routes 
+Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+
 
 // fitur pencatatan sampah
 Route::middleware(['auth'])->group(function () {

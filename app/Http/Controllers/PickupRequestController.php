@@ -40,7 +40,6 @@ class PickupRequestController extends BaseController
         $validated = $request->validate([
             'address' => 'required|string|max:255',
             'description' => 'required|string',
-            'jenis_sampah' => 'required|exists:collection_points,id',
             'pickup_time' => 'nullable|date|after:now',
         ]);
 
@@ -48,8 +47,9 @@ class PickupRequestController extends BaseController
         $pickupRequest->user_id = auth()->id();
         $pickupRequest->address = $validated['address'];
         $pickupRequest->description = $validated['description'];
-        $pickupRequest->collection_point_id = $validated['jenis_sampah'];
-        $pickupRequest->pickup_time = $validated['pickup_time'] ?? null;
+        $pickupRequest->jenis_sampah = $request->input('jenis_sampah');
+        $pickupRequest->jumlah_sampah = $request->input('jumlah_sampah');
+        $pickupRequest->pickup_time = $validated['pickup_time'];
         $pickupRequest->status = 'pending';
         $pickupRequest->save();
 

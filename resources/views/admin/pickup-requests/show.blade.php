@@ -23,6 +23,14 @@
                             <p class="mt-1">{{ $pickupRequest->address }}</p>
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-700">Waste Type</label>
+                            <p class="mt-1">{{ $pickupRequest->jenis_sampah }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Waste Quantity</label>
+                            <p class="mt-1">{{ $pickupRequest->jumlah_sampah }}</p>
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700">Description</label>
                             <p class="mt-1">{{ $pickupRequest->description }}</p>
                         </div>

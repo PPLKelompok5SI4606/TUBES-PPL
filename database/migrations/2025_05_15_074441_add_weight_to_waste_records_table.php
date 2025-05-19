@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::table('pickup_requests', function (Blueprint $table) {
-        //     $table->unsignedBigInteger('collection_point_id')->nullable()->after('user_id');
-        // });
+        Schema::table('waste_records', function (Blueprint $table) {
+            $table->integer('weight')->default(1)->after('category');
+        });
     }
 
     /**
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pickup_requests', function (Blueprint $table) {
-            $table->dropColumn('collection_point_id');
+        Schema::table('waste_records', function (Blueprint $table) {
+            $table->dropColumn('weight');
         });
     }
 };
