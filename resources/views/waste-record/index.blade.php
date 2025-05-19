@@ -79,7 +79,7 @@
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Riwayat Sampah</span>
+                        <span class="fw-bold"><i class="bi bi-clock-history me-2"></i>Riwayat Sampah</span>
                         <a href="{{ route('waste-record.create') }}" class="btn btn-sm btn-primary">Tambah Catatan Baru</a>
                     </div>
 
@@ -111,6 +111,12 @@
                                     </select>
                                 </div>
 
+                                <!-- Filter Deskripsi (Keyword) -->
+                                <div class="col-md-3">
+                                    <label for="keyword" class="form-label">Cari Deskripsi</label>
+                                    <input type="text" class="form-control" id="keyword" name="keyword" value="{{ request('keyword') }}">
+                                </div>
+
                                 <!-- Tombol Filter dan Reset -->
                                 <div class="col-md-3 d-flex align-items-end">
                                     <button type="submit" class="btn btn-secondary me-2">Filter</button>
@@ -119,10 +125,19 @@
                             </form>
                         </div>
 
+                        <!-- Total Sampah -->
+                        @php
+                            $totalKantong = $wasteRecords->sum('weight');
+                        @endphp
+                        <div class="mb-3">
+                            <span class="fw-semibold">Total Sampah: </span>
+                            <span class="badge bg-success">{{ $totalKantong }} kantong</span>
+                        </div>
+
                         <!-- Tabel Riwayat Sampah -->
                         @if($wasteRecords->count() > 0)
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table table-striped align-middle">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
@@ -147,11 +162,11 @@
                                                 <td>{{ $wasteRecord->description ?? '-' }}</td>
                                                 <td>
                                                     <div class="action-btns">
-                                                        <a href="{{ route('waste-record.edit', $wasteRecord) }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                                                        <a href="{{ route('waste-record.edit', $wasteRecord) }}" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Catatan"><i class="bi bi-pencil"></i> Edit</a>
                                                         <form action="{{ route('waste-record.destroy', $wasteRecord) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Hapus</button>
+                                                            <button type="submit" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Catatan"><i class="bi bi-trash"></i> Hapus</button>
                                                         </form>
                                                     </div>
                                                 </td>
@@ -166,6 +181,7 @@
                             </div>
                         @else
                             <div class="alert alert-info text-center">
+                                <i class="bi bi-inbox fs-2 mb-2"></i><br>
                                 Belum ada data sampah yang tercatat.
                                 <a href="{{ route('waste-record.create') }}" class="alert-link">Tambah catatan baru</a>!
                             </div>
@@ -178,5 +194,11 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
 </body>
 </html>

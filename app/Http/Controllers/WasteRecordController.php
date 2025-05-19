@@ -26,6 +26,11 @@ class WasteRecordController extends Controller
             $query->where('category', $request->category);
         }
 
+        // Filter berdasarkan deskripsi jika ada (keyword)
+        if ($request->filled('keyword')) {
+            $query->where('description', 'like', '%' . $request->keyword . '%');
+        }
+
         $wasteRecords = $query->paginate(10);
 
         return view('waste-record.index', compact('wasteRecords'));
