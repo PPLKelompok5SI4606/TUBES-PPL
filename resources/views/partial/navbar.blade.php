@@ -18,12 +18,21 @@
                     <a class="nav-link" href="{{ route('waste-reports.index') }}">Waste Reports</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('delay-reports.index') }}">Delay Reports</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('waste.*') ? 'active' : '' }}" href="{{ route('waste-record.index') }}">Catatan Sampah</a>
+            </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#about">About</a>
                 </li>
             </ul>
             
             <div class="d-flex gap-2">
                 @auth
+                    <a href="{{ route('user.dashboard') }}" class="btn btn-light me-2">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
                     <a href="{{ route('pickup.create') }}" class="btn btn-light me-2">
                         <i class="bi bi-truck"></i> Request Pickup
                     </a>
@@ -34,6 +43,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="{{ route('pickup.index') }}">My Pickups</a></li>
                             <li><a class="dropdown-item" href="{{ route('waste-reports.index') }}">My Waste Reports</a></li>
+                            <li><a class="dropdown-item" href="{{ route('delay-reports.index') }}">My Delay Reports</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('auth.user.logout') }}">

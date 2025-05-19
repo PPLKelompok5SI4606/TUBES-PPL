@@ -26,7 +26,10 @@ class TpsTpaController extends Controller
             'kapasitas_total' => 'required|numeric|min:0',
             'kapasitas_terisi' => 'required|numeric|min:0|lte:kapasitas_total',
             'lokasi' => 'required|string|max:255',
-            'status' => 'required|string|max:255'
+            'lat' => 'nullable|numeric|between:-90,90',
+            'lng' => 'nullable|numeric|between:-180,180',
+            'status' => 'required|string|max:255',
+            'description' => 'nullable|string'
         ]);
 
         TpsTpa::create($validated);
@@ -48,7 +51,10 @@ class TpsTpaController extends Controller
             'kapasitas_total' => 'required|numeric|min:0',
             'kapasitas_terisi' => 'required|numeric|min:0|lte:kapasitas_total',
             'lokasi' => 'required|string|max:255',
-            'status' => 'required|string|max:255'
+            'lat' => 'nullable|numeric|between:-90,90',
+            'lng' => 'nullable|numeric|between:-180,180',
+            'status' => 'required|string|max:255',
+            'description' => 'nullable|string'
         ]);
 
         $tpsTpa->update($validated);
@@ -63,4 +69,10 @@ class TpsTpaController extends Controller
         return redirect()->route('tps-tpa.index')
             ->with('success', 'Data TPS/TPA berhasil dihapus');
     }
-} 
+    
+    public function map()
+    {
+        $tpsPoints = TpsTpa::all();
+        return view('tps-tpa.map', compact('tpsPoints'));
+    }
+}

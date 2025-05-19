@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PickupRequest;
+use App\Models\CollectionPoint;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -29,7 +30,9 @@ class PickupRequestController extends BaseController
 
     public function create()
     {
-        return view('pickups.create');
+        $tpsPoints = CollectionPoint::where('type', 'TPS')->get();
+        $tpaPoints = CollectionPoint::where('type', 'TPA')->get();
+        return view('pickups.create', compact('tpsPoints', 'tpaPoints'));
     }
 
     public function store(Request $request)
@@ -37,6 +40,7 @@ class PickupRequestController extends BaseController
         $validated = $request->validate([
             'address' => 'required|string|max:255',
             'description' => 'required|string',
+            'jenis_sampah' => 'required|exists:collection_points,id',
             'pickup_time' => 'nullable|date|after:now',
         ]);
 
@@ -44,7 +48,8 @@ class PickupRequestController extends BaseController
         $pickupRequest->user_id = auth()->id();
         $pickupRequest->address = $validated['address'];
         $pickupRequest->description = $validated['description'];
-        $pickupRequest->pickup_time = $validated['pickup_time'];
+        $pickupRequest->collection_point_id = $validated['jenis_sampah'];
+        $pickupRequest->pickup_time = $validated['pickup_time'] ?? null;
         $pickupRequest->status = 'pending';
         $pickupRequest->save();
 
@@ -62,4 +67,38 @@ class PickupRequestController extends BaseController
         $pickupRequests = auth()->user()->pickupRequests()->latest()->paginate(10);
         return view('pickups.history', compact('pickupRequests'));
     }
-} 
+    public function sampah()
+    {
+        // Mengambil data jumlah sampah TPS dan TPA berdasarkan bulan
+        $jumlahSampahTPSd = PickupRequest::where('jenis_sampah', 'TPS')->count();
+        $jumlahSampahTPAd = PickupRequest::where('jenis_sampah', 'TPA')->count();
+
+        $jumlahSampahTPS = PickupRequest::where('jenis_sampah', 'TPS')
+            ->selectRaw('COUNT(*) as count, MONTH(pickup_time) as month')
+            ->whereNotNull('pickup_time') // Pastikan pickup_time tidak null
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        $jumlahSampahTPA = PickupRequest::where('jenis_sampah', 'TPA')
+            ->selectRaw('COUNT(*) as count, MONTH(pickup_time) as month')
+            ->whereNotNull('pickup_time') // Pastikan pickup_time tidak null
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        // Menyediakan data untuk bulan (1 - 12)
+        $months = range(1, 12);
+
+        // Pastikan bulan yang kosong terisi dengan 0
+        $dataTPS = [];
+        $dataTPA = [];
+
+        foreach ($months as $month) {
+            // Ambil data bulan dari hasil query atau set ke 0 jika tidak ada data
+            $dataTPS[] = $jumlahSampahTPS->get($month, 0);
+            $dataTPA[] = $jumlahSampahTPA->get($month, 0);
+        }
+
+        // Mengirimkan data ke view, termasuk $jumlahSampahTPSd dan $jumlahSampahTPAd
+        return view('dashboard.sampah', compact('jumlahSampahTPSd', 'jumlahSampahTPAd', 'jumlahSampahTPS', 'jumlahSampahTPA', 'dataTPS', 'dataTPA', 'months'));
+    }
+}

@@ -68,4 +68,4 @@ class PickupController extends Controller
 
         return view('pickup.show', compact('pickupRequest'));
     }
-} 
+}

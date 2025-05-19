@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +26,7 @@
     .text-primary-green {
       color: #4CAF50;
     }
-    
+
 
     .navbar {
       background-color: #4CAF50 !important;
@@ -41,7 +42,7 @@
 
     .article-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
 
     .article-image {
@@ -110,6 +111,7 @@
     }
   </style>
 </head>
+
 <body>
   <!-- Navbar -->
   @include('partial.navbar')
@@ -120,45 +122,45 @@
 
     <div class="row g-4">
       @forelse ($articles as $article)
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="card article-card border-0 shadow-sm">
-            <div class="position-relative">
-              @if($article->image)
-                <img src="{{ asset('storage/' . $article->image) }}" 
-                     class="article-image card-img-top" 
-                     alt="{{ $article->title }}">
-              @endif
-              <span class="category-badge">Article</span>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card article-card border-0 shadow-sm">
+          <div class="position-relative">
+            @if($article->image)
+            <img src="{{ asset('storage/' . $article->image) }}"
+              class="article-image card-img-top"
+              alt="{{ $article->title }}">
+            @endif
+            <span class="category-badge">Article</span>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <div class="mb-3">
+              <div class="d-flex align-items-center meta-info mb-2">
+                <i class="fas fa-user-circle me-2"></i>
+                <span>{{ $article->user->name }}</span>
+                <span class="mx-2">•</span>
+                <i class="far fa-calendar-alt me-2"></i>
+                <span>{{ $article->created_at->format('d M Y') }}</span>
+              </div>
+              <h5 class="card-title">{{ $article->title }}</h5>
             </div>
-            <div class="card-body d-flex flex-column">
-              <div class="mb-3">
-                <div class="d-flex align-items-center meta-info mb-2">
-                  <i class="fas fa-user-circle me-2"></i>
-                  <span>{{ $article->user->name }}</span>
-                  <span class="mx-2">•</span>
-                  <i class="far fa-calendar-alt me-2"></i>
-                  <span>{{ $article->created_at->format('d M Y') }}</span>
-                </div>
-                <h5 class="card-title">{{ $article->title }}</h5>
-              </div>
-              
-              <p class="card-text flex-grow-1">{{ $article->content }}</p>
-              
-              <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('article.show', $article->id) }}" 
-                   class="read-more-btn btn btn-outline-success">
-                   Read More <i class="fas fa-arrow-right ms-2"></i>
-                </a>
-              </div>
+
+            <p class="card-text flex-grow-1">{{ $article->content }}</p>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="{{ route('article.show', $article->id) }}"
+                class="read-more-btn btn btn-outline-success">
+                Read More <i class="fas fa-arrow-right ms-2"></i>
+              </a>
             </div>
           </div>
         </div>
+      </div>
       @empty
-        <div class="col-12 text-center">
-          <div class="alert alert-info">
-            <i class="fas fa-info-circle me-2"></i>Tidak ada artikel tersedia
-          </div>
+      <div class="col-12 text-center">
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i>Tidak ada artikel tersedia
         </div>
+      </div>
       @endforelse
     </div>
   </div>
@@ -166,4 +168,5 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

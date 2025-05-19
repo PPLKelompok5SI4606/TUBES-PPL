@@ -143,6 +143,15 @@
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Detailed history</li>
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Status notifications</li>
                             </ul>
+                            @auth
+                                <a href="{{ route('waste-reports.create') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-cursor"></i> Laporkan
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-person-plus"></i> Sign Up to Report
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -182,10 +191,38 @@
                             </div>
                             <p class="card-text">Access comprehensive information about waste management, including pickup schedules and facility capacities.</p>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pickup schedules</li>
-                                <a href="{{route('peta.index')}}">Facility capacities</a>
-                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Waste guidelines</li>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pickup schedules</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><a href="{{route('peta.index')}}">Facilities map</a></li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Facility capacities</li>
+                                </ul>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-clock-history text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">Report Delay</h3>
+                            </div>
+                            <p class="card-text">Report any delays in garbage collection to help us improve our services and ensure timely pickups.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Quick reporting</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time updates</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Priority handling</li>
+                            </ul>
+                            @auth
+                                <a href="{{ route('delay-reports.create') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-clock-history"></i> Laporkan Keterlambatan
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-person-plus"></i> Sign Up to Report
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
