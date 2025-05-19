@@ -144,9 +144,10 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-});
+//user dashboard routes 
+Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+
 
 // fitur pencatatan sampah
 Route::middleware(['auth'])->group(function () {

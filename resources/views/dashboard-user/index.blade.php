@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User Dashboard - CleanSweep</title>
+    <title>Dashboard Pengguna - CleanSweep</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="{{ asset('images/login.png') }}" rel="icon" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -95,194 +94,430 @@
             height: 3rem;
             color: #4CAF50;
         }
+        .bg-anorganik {
+            background-color: #2196F3 !important;
+        }
+        .bg-b3 {
+            background-color: #F44336 !important;
+        }
+        .border-anorganik {
+            border-color: #2196F3 !important;
+        }
+        .border-b3 {
+            border-color: #F44336 !important;
+        }
+        .text-anorganik {
+            color: #2196F3 !important;
+        }
+        .text-b3 {
+            color: #F44336 !important;
+        }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen font-poppins">
+    {{-- Navbar --}}
     @include('partial.navbar')
 
-    <div class="content py-5">
-        <div class="container py-4">
-            <!-- Dashboard Title -->
-            <div class="mb-4">
-                <h1 class="font-poppins fw-bold fs-1 text-dark">User Dashboard</h1>
-                <p class="font-poppins text-secondary fs-5">Welcome, {{ Auth::user()->name }}!</p>
-            </div>
-
-            <!-- Grid Cards -->
-            <div class="row g-4 mb-5">
-                @foreach([
-                    ['label' => 'Total Pickup Requests', 'value' => $userPickupRequests, 'icon' => '<i class="bi bi-truck text-success fs-1"></i>'],
-                    ['label' => 'Completed Pickups', 'value' => $completedPickups, 'icon' => '<i class="bi bi-check-circle text-success fs-1"></i>'],
-                    ['label' => 'Pending Pickups', 'value' => $pendingPickups, 'icon' => '<i class="bi bi-clock text-success fs-1"></i>'],
-                    ['label' => 'Rejected Pickups', 'value' => $rejectedPickups, 'icon' => '<i class="bi bi-x-circle text-success fs-1"></i>'],
-                ] as $card)
-                <div class="col-md-6 col-lg-3">
-                    <div class="dashboard-card">
-                        <div>
-                            <p class="font-poppins fw-medium text-primary-green mb-1">{{ $card['label'] }}</p>
-                            <p class="font-poppins fw-light text-secondary fs-4 mb-0">{{ $card['value'] }}</p>
-                        </div>
-                        <div class="card-icon">
-                            {!! $card['icon'] !!}
-                        </div>
+    <!-- Main Content -->
+    <div class="container content py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0"><i class="bi bi-recycle text-success me-2"></i>Dashboard Pengelolaan Sampah</h1>
+            <a href="{{ route('waste-record.create') }}" class="btn btn-success">
+                <i class="bi bi-plus-lg"></i> Catat Sampah Baru
+            </a>
+        </div>
+        
+        <!-- Statistik Utama -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="dashboard-card">
+                    <div>
+                        <h6 class="text-muted mb-1">Total Sampah Dikelola</h6>
+                        <h3 class="mb-0 fw-bold">{{ number_format($totalWaste, 0) }} kantong</h3>
+                    </div>
+                    <div class="card-icon">
+                        <i class="bi bi-trash-fill fs-1"></i>
                     </div>
                 </div>
-                @endforeach
+            </div>
+            
+            @php
+                $organikWeight = 0;
+                $anorganikWeight = 0;
+                $b3Weight = 0;
+                
+                foreach ($wasteByCategory as $category) {
+                    if (strtolower($category->category) === 'organik') {
+                        $organikWeight = $category->total_weight;
+                    } elseif (strtolower($category->category) === 'anorganik') {
+                        $anorganikWeight = $category->total_weight;
+                    } elseif (strtolower($category->category) === 'b3') {
+                        $b3Weight = $category->total_weight;
+                    }
+                }
+            @endphp
+            
+            <div class="col-md mb-3">
+                <div class="dashboard-card" style="border-left-color: #4CAF50">
+                    <div>
+                        <h6 class="text-muted mb-1">Organik</h6>
+                        <h3 class="mb-0 fw-bold">{{ number_format($organikWeight, 0) }} kantong</h3>
+                    </div>
+                    <div class="card-icon">
+                        <i class="bi bi-egg-fill fs-1" style="color: #4CAF50"></i>
+                    </div>
+                </div>
             </div>
 
-            <!-- Pickup Requests Chart -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <div style="height: 400px;">
-                        <canvas id="grafikUserPickup"></canvas>
+            <div class="col-md mb-3">
+                <div class="dashboard-card" style="border-left-color: #2196F3">
+                    <div>
+                        <h6 class="text-muted mb-1">Anorganik</h6>
+                        <h3 class="mb-0 fw-bold">{{ number_format($anorganikWeight, 0) }} kantong</h3>
+                    </div>
+                    <div class="card-icon">
+                        <i class="bi bi-box-seam fs-1" style="color: #2196F3"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md mb-3">
+                <div class="dashboard-card" style="border-left-color: #F44336">
+                    <div>
+                        <h6 class="text-muted mb-1">B3</h6>
+                        <h3 class="mb-0 fw-bold">{{ number_format($b3Weight, 0) }} kantong</h3>
+                    </div>
+                    <div class="card-icon">
+                        <i class="bi bi-exclamation-triangle fs-1" style="color: #F44336"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Grafik -->
+        <div class="row mb-4">
+            <div class="col-lg-8 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom border-success">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Tren Sampah 6 Bulan Terakhir</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="monthlySummaryChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom border-success">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-pie-chart-fill me-2 text-success"></i>Distribusi Kategori</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoryPieChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Grafik Mingguan per Kategori -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom border-success">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-bar-chart-line me-2 text-success"></i>Sampah per Kategori (4 Minggu Terakhir)</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="weeklyTrendChart" height="250"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="bg-success text-white py-5 mt-auto">
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <h3 class="h5 mb-3">About Us</h3>
-                    <p class="mb-0">We're dedicated to keeping our communities clean and environmentally friendly.</p>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3 text-success"><i class="bi bi-recycle me-2"></i>CleanSweep</h5>
+                    <p class="text-muted">Solusi pengelolaan sampah yang efisien dan ramah lingkungan untuk masa depan yang lebih bersih dan berkelanjutan.</p>
                 </div>
-                <div class="col-md-4">
-                    <h3 class="h5 mb-3">Contact</h3>
-                    <p class="mb-0">Email: info@cleansweep.com<br>Phone: (123) 456-7890</p>
-                </div>
-                <div class="col-md-4">
-                    <h3 class="h5 mb-3">Follow Us</h3>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white text-decoration-none hover-opacity">Facebook</a>
-                        <a href="#" class="text-white text-decoration-none hover-opacity">Twitter</a>
-                        <a href="#" class="text-white text-decoration-none hover-opacity">Instagram</a>
-                    </div>
-                </div>
+                {{-- Removed Navigasi section --}}
+                {{-- <div class="col-md-2 mb-3">
+                    <h6 class="mb-3">Navigasi</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ route('user.dashboard') }}" class="text-decoration-none text-muted">Dashboard User</a></li>
+                        <li class="mb-2"><a href="{{ route('waste-record.index') }}" class="text-decoration-none text-muted">Catatan Sampah</a></li>
+                        <li class="mb-2"><a href="{{ route('waste-reports.index') }}" class="text-decoration-none text-muted">Laporan</a></li>
+
+                    </ul>
+                </div> --}}
             </div>
-            <div class="mt-4 pt-4 border-top border-light text-center">
-                <p class="mb-0">&copy; {{ date('Y') }} Clean Homes Initiative. All rights reserved.</p>
+            <hr class="my-4">
+            <div class="text-center text-muted">
+                <small>&copy; 2025 CleanSweep. Hak Cipta Dilindungi.</small>
             </div>
         </div>
     </footer>
 
+    <!-- Bootstrap & Chart Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const canvasUserPickup = document.getElementById('grafikUserPickup');
-        const ctxUserPickup = canvasUserPickup.getContext('2d');
-        const chartUserPickup = new Chart(ctxUserPickup, {
-            type: 'bar',
-            data: {
-                labels: @json($months),
-                datasets: [{
-                    label: 'Pending',
-                    data: @json($userPendingData),
-                    backgroundColor: '#FF9F40',
-                    borderColor: '#FF9F40',
-                    borderWidth: 1
-                }, {
-                    label: 'Completed',
-                    data: @json($userCompletedData),
-                    backgroundColor: '#36A2EB',
-                    borderColor: '#36A2EB',
-                    borderWidth: 1
-                }, {
-                    label: 'Rejected',
-                    data: @json($userRejectedData),
-                    backgroundColor: '#FF6384',
-                    borderColor: '#FF6384',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Your Pickup Request Status (Monthly)',
-                        font: {
-                            size: 18,
-                            family: 'Poppins',
-                            weight: 'bold'
-                        },
-                        padding: {
-                            bottom: 20
-                        }
-                    },
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            boxWidth: 10,
-                            padding: 20,
-                            font: {
-                                family: 'Poppins'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            family: 'Poppins',
-                            size: 14
-                        },
-                        bodyFont: {
-                            family: 'Poppins',
-                            size: 13
-                        },
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y + ' requests';
-                                }
-                                return label;
-                            }
-                        }
-                    }
+        // Set warna sesuai tema CleanSweep
+        const primaryColor = '#4CAF50';
+        const secondaryColor = '#2196F3';
+        const dangerColor = '#F44336';
+        
+        // Data untuk grafik bulanan
+        const monthlySummaryChart = new Chart(
+            document.getElementById('monthlySummaryChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode($chartLabels) !!},
+                    datasets: [{
+                        label: 'Total Sampah (kantong)',
+                        data: {!! json_encode($chartData) !!},
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                        borderColor: primaryColor,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointBackgroundColor: primaryColor,
+                        pointBorderColor: '#fff',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Berat (kantong)',
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
                         },
-                        title: {
-                            display: true,
-                            text: 'Month',
-                            font: {
-                                family: 'Poppins',
-                                size: 14
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan',
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
+                            },
+                            grid: {
+                                display: false
                             }
                         }
                     },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        },
-                        title: {
+                    plugins: {
+                        legend: {
                             display: true,
-                            text: 'Number of Requests',
-                            font: {
-                                family: 'Poppins',
-                                size: 14
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
                             }
                         },
-                        ticks: {
-                            precision: 0
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#000',
+                            bodyColor: '#000',
+                            titleFont: {
+                                family: "'Poppins', sans-serif",
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                family: "'Poppins', sans-serif"
+                            },
+                            borderColor: primaryColor,
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Total: ${context.raw} kantong`;
+                                }
+                            }
                         }
                     }
                 }
             }
-        });
-    });
+        );
+        
+        // Data untuk grafik pie kategori
+        const categoryData = [
+            {{ $organikWeight }}, 
+            {{ $anorganikWeight }}, 
+            {{ $b3Weight }}
+        ];
+        
+        const categoryPieChart = new Chart(
+            document.getElementById('categoryPieChart'),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: ['Organik', 'Anorganik', 'B3'],
+                    datasets: [{
+                        data: categoryData,
+                        backgroundColor: [
+                            primaryColor,
+                            secondaryColor,
+                            dangerColor
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#000',
+                            bodyColor: '#000',
+                            titleFont: {
+                                family: "'Poppins', sans-serif",
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                family: "'Poppins', sans-serif"
+                            },
+                            borderColor: '#ccc',
+                            borderWidth: 1,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw} kantong`;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        
+        // Data untuk grafik mingguan per kategori
+        const weeklyTrendChart = new Chart(
+            document.getElementById('weeklyTrendChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: {!! isset($weeklyChartData['labels']) ? json_encode($weeklyChartData['labels']) : '["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"]' !!},
+                    datasets: [
+                        {
+                            label: 'Organik',
+                            data: {!! isset($weeklyChartData['organik']) ? json_encode($weeklyChartData['organik']) : '[0, 0, 0, 0]' !!},
+                            backgroundColor: primaryColor,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Anorganik',
+                            data: {!! isset($weeklyChartData['anorganik']) ? json_encode($weeklyChartData['anorganik']) : '[0, 0, 0, 0]' !!},
+                            backgroundColor: secondaryColor,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'B3',
+                            data: {!! isset($weeklyChartData['b3']) ? json_encode($weeklyChartData['b3']) : '[0, 0, 0, 0]' !!},
+                            backgroundColor: dangerColor,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Berat (kantong)',
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Minggu',
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                padding: 20,
+                                font: {
+                                    family: "'Poppins', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#000',
+                            bodyColor: '#000',
+                            titleFont: {
+                                family: "'Poppins', sans-serif",
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                family: "'Poppins', sans-serif"
+                            },
+                            borderColor: '#ccc',
+                            borderWidth: 1,
+                            padding: 12
+                        }
+                    }
+                }
+            }
+        );
     </script>
 </body>
 </html>
