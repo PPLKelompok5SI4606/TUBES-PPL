@@ -107,4 +107,5 @@ class WasteRecordController extends Controller
         return redirect()->route('waste-record.index')
             ->with('success', 'Data sampah berhasil dihapus!');
     }
+    
 }

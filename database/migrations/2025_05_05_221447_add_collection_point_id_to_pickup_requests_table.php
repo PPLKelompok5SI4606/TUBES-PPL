@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pickup_requests', function (Blueprint $table) {
-            $table->unsignedBigInteger('collection_point_id')->nullable()->after('user_id');
-        });
+        // Schema::table('pickup_requests', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('collection_point_id')->nullable()->after('user_id');
+        // });
     }
 
     /**

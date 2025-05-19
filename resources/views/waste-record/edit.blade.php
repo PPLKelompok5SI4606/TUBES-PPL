@@ -79,7 +79,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="{{ route('pickup.index') }}">My Pickups</a></li>
-                                <li><a class="dropdown-item" href="{{ route('waste-reports.index') }}">My Waste Reports</a></li>
+                                <li><a class="dropdown-item" href="{{ route('waste-record.index') }}">My Waste Reports</a></li>
                                 <li><a class="dropdown-item" href="{{ route('delay-reports.index') }}">My Delay Reports</a></li>
                                 <li><a class="dropdown-item" href="{{ route('waste-record.index') }}">Waste Record</a></li>
                                 <li><hr class="dropdown-divider"></li>
