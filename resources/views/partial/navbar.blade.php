@@ -20,17 +20,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('delay-reports.index') }}">Delay Reports</a>
                 </li>
-            </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#about">About</a>
+                    <a class="nav-link" href="{{ route('user.dashboard') }}">Dashboard</a>
                 </li>
             </ul>
             
             <div class="d-flex gap-2">
                 @auth
-                    <a href="{{ route('user.dashboard') }}" class="btn btn-light me-2">
+                    {{-- Dashboard link moved and simplified --}}
+                    {{-- <a href="{{ route('user.dashboard') }}" class="btn btn-light me-2">
                         <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
+                    </a> --}}
                     <a href="{{ route('pickup.create') }}" class="btn btn-light me-2">
                         <i class="bi bi-truck"></i> Request Pickup
                     </a>

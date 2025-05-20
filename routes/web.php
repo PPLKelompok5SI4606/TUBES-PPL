@@ -158,9 +158,16 @@ Route::middleware('checkRole:pengelola')->group(function () {
 });
 
 
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 });
+
+//user dashboard routes 
+Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+
+
 
 // fitur pencatatan sampah
 Route::middleware(['auth'])->group(function () {

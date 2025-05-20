@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
+
         Schema::table('pickup_requests', function (Blueprint $table) {
             // Check if column exists before adding
             if (!Schema::hasColumn('pickup_requests', 'collection_point_id')) {
@@ -18,6 +19,11 @@ return new class extends Migration
                     ->onDelete('set null');
             }
         });
+
+        // Schema::table('pickup_requests', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('collection_point_id')->nullable()->after('user_id');
+        // });
+
     }
 
     public function down()
