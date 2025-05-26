@@ -86,9 +86,6 @@
             <path d="M9 16.17l-3.88-3.88L4 13.41l5 5 9-9-1.41-1.42z"></path>
         </svg>
     </div>
-        <svg class="w-12 h-12 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M9 16.17l-3.88-3.88L4 13.41l5 5 9-9-1.41-1.42z"></path>
-        </svg>
     </div>
 </div>
 
