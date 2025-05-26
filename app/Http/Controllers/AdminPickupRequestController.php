@@ -51,7 +51,7 @@ class AdminPickupRequestController extends Controller
                 $wasteVolume = floatval($validated['waste_volume']) * 0.1;
                 
                 // Update TPS/TPA capacity
-               $newCapacity = $tpsTpa->kapasitas_terisi + $wasteVolume;
+                $newCapacity = $tpsTpa->kapasitas_terisi + $wasteVolume;
                 
                 // Check if TPS/TPA has enough capacity
                 if ($newCapacity > $tpsTpa->kapasitas_total) {

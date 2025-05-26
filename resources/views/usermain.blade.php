@@ -21,12 +21,33 @@
             flex: 1;
         }
         .hero-section {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                              url('{{ asset('images/cleanup-bg.jpg') }}');
-            background-size: cover;
-            background-position: center;
+            position: relative;
             color: white;
             padding: 100px 0;
+            overflow: hidden;
+        }
+
+        .hero-images-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-image {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            transition: flex 0.8s ease;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
         }
         .service-icon {
             color: #4CAF50;
@@ -76,7 +97,12 @@
     @include('partial.navbar')
 
     <section class="hero-section">
-        <div class="container">
+        <div class="hero-images-container">
+            <div class="hero-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ asset('images/landing2.jpg') }}');"></div>
+            <div class="hero-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ asset('images/landing5.jpg') }}');"></div>
+            <div class="hero-image" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ asset('images/landing3.jpg') }}');"></div>
+        </div>
+        <div class="container hero-content">
             <h1 class="display-4 fw-bold mb-4">Join us in making our world cleaner,<br>one waste at a time</h1>
             @yield('hero-content')
         </div>
@@ -126,6 +152,11 @@
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Waste segregation</li>
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Sustainable solutions</li>
                             </ul>
+                            <div class="mt-3">
+                                <a href="/articles" class="btn btn-success mt-3">
+                                    <i class="bi bi-newspaper"></i> Baca Artikel Recycling
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -193,10 +224,13 @@
                             <ul class="list-unstyled">
                                 <ul class="list-unstyled">
                                     <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pickup schedules</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><a href="{{route('peta.index')}}">Facilities map</a></li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><a>Facilities map</a></li>
                                     <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Facility capacities</li>
                                 </ul>
                             </ul>
+                            <a href="{{route('peta.index')}}" class="btn btn-success mt-3">
+                                <i class="bi bi-map"></i> Lihat Informasi
+                            </a>
                         </div>
                     </div>
                 </div>
