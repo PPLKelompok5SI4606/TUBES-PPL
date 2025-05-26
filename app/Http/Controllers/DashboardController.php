@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\TpsTpa;
 use App\Models\PickupRequest;
 use Illuminate\Http\Request;
+use App\Models\WasteTransfer;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -44,6 +45,12 @@ class DashboardController extends Controller
         
         // Combine both sources
         $dailyWasteInput = $pickupWasteInput + $reportWasteInput;
+        
+        $todayTransfers = WasteTransfer::whereDate('transfer_date', Carbon::today())
+            ->sum('waste_amount');
+    
+        $todayTransferCount = WasteTransfer::whereDate('transfer_date', Carbon::today())
+            ->count();
         
         $dailyWasteProcessed = $dailyWasteInput * 0.8; // Assuming 80% of waste is processed daily
         
@@ -85,7 +92,9 @@ class DashboardController extends Controller
             'dailyWasteProcessed',
             'dailyDates',
             'dailyInputData',
-            'dailyProcessedData'
+            'dailyProcessedData',
+            'todayTransfers',
+            'todayTransferCount'
         ));
     }
 

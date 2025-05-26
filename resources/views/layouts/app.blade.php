@@ -53,48 +53,13 @@
     @stack('styles')
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-recycle me-2"></i>
-                CleanSweep
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-home me-2"></i>Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-info-circle me-2"></i>About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-envelope me-2"></i>Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    @include('partial.navbar')
 
     <div class="content">
         @yield('content')
     </div>
 
-    <footer class="bg-success text-white py-4 footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>CleanSweep</h5>
-                    <p>Making our world cleaner, one waste at a time.</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <p>&copy; {{ date('Y') }} CleanSweep. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @include('partial.footeruser')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
