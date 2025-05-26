@@ -66,6 +66,12 @@
                             <p class="mt-1">{{ $pickupRequest->admin_notes }}</p>
                         </div>
                         @endif
+                        @if($pickupRequest->tps_tpa_id)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Target Facility</label>
+                            <p class="mt-1">{{ $tpsTpa->nama }} ({{ $tpsTpa->tipe }})</p>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -89,7 +95,27 @@
                             <label for="admin_notes" class="block text-sm font-medium text-gray-700">Admin Notes</label>
                             <textarea name="admin_notes" id="admin_notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-green focus:ring focus:ring-primary-green focus:ring-opacity-50">{{ old('admin_notes', $pickupRequest->admin_notes) }}</textarea>
                         </div>
+                        
+                        <div>
+                            <label for="tps_tpa_id" class="block text-sm font-medium text-gray-700">Target TPS/TPA</label>
+                            <select name="tps_tpa_id" id="tps_tpa_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-green focus:ring focus:ring-primary-green focus:ring-opacity-50">
+                                <option value="">-- Select Facility --</option>
+                                @foreach($tpsTpaLocations as $tpsTpa)
+                                    <option value="{{ $tpsTpa->id }}" {{ old('tps_tpa_id', $pickupRequest->tps_tpa_id) == $tpsTpa->id ? 'selected' : '' }}>
+                                        {{ $tpsTpa->nama }} ({{ $tpsTpa->tipe }}) - {{ $tpsTpa->kapasitas_terisi }}/{{ $tpsTpa->kapasitas_total }} m³ used
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="text-sm text-gray-500 mt-1">Required when marking as completed</p>
+                        </div>
+                        
+                        <div>
+                            <label for="waste_volume" class="block text-sm font-medium text-gray-700">Waste Volume (bags)</label>
+                            <input type="number" name="waste_volume" id="waste_volume" value="{{ old('waste_volume', $pickupRequest->jumlah_sampah) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-green focus:ring focus:ring-primary-green focus:ring-opacity-50">
+                            <p class="text-sm text-gray-500 mt-1">Each bag is approximately 0.1 m³</p>
+                        </div>
                     </div>
+                    
                     <div class="mt-6">
                         <button type="submit" class="bg-primary-green text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-opacity-50">
                             Update Status
@@ -99,4 +125,4 @@
             </div>
         </div>
     </div>
-@endsection 
+@endsection

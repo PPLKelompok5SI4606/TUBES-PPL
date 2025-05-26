@@ -41,8 +41,8 @@ class PickupRequest extends Model
         return $this->hasMany(Notification::class);
     }
 
-    public function collectionPoint()
+    public function tpsTpa()
     {
-        return $this->belongsTo(\App\Models\CollectionPoint::class);
+        return $this->belongsTo(TpsTpa::class, 'tps_tpa_id');
     }
 }

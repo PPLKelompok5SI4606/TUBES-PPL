@@ -76,7 +76,29 @@
                 <span>{{ __('TPA & TPS') }}</span>
             </a>
         </div>
+
+          <!-- Schedule Section -->
+<div class="mb-6 px-4">
+    <h2 class="text-white/70 text-xs uppercase tracking-wider mb-2 px-1">Jadwal</h2>
+    
+    <!-- Jadwal Pengangkutan -->
+    <a href="{{ url('admin/jadwal-pengangkutan') }}" 
+       class="flex items-center px-3 py-3 rounded-lg transition-all duration-200
+             {{ request()->is('admin/jadwal-pengangkutan') ? 
+                'bg-white/20 text-white font-medium shadow-sm' : 
+                'text-white/80 hover:bg-white/10' }}">
+        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 
+            2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 
+            16H5V10h14zm0-12H5V6h14z"/>
+        </svg>
+        <span>{{ __('Jadwal Pengangkutan') }}</span>
+    </a>
+</div>
     </nav>
+
+  
+
     
     <!-- Simple Footer -->
     <div class="px-4 py-4 mt-auto">
