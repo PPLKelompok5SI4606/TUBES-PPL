@@ -134,8 +134,8 @@ Route::middleware(['auth'])->group(function () {
     // fitur pencatatan sampah
     Route::resource('waste-record', WasteRecordController::class);
 
-    // Routes for authenticated users
-    Route::get('/jadwal-pengangkutan/view', [JadwalPengangkutanController::class, 'userView'])->name('jadwal-pengangkutan.view');
+    // Jadwal Pengangkutan untuk User
+    Route::get('/jadwal-pengangkutan', [JadwalPengangkutanController::class, 'userView'])->name('jadwal-pengangkutan.view');
 });
 
 // API Routes for waste reports
