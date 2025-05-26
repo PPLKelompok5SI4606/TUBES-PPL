@@ -226,6 +226,32 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-calendar-check text-success fs-1 me-3"></i>
+                                <h3 class="card-title mb-0">Jadwal Pengangkutan</h3>
+                            </div>
+                            <p class="card-text">Lihat jadwal pengangkutan sampah yang telah dijadwalkan oleh admin untuk area Anda.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Jadwal terbaru</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Informasi petugas</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Lokasi pengangkutan</li>
+                            </ul>
+                            @auth
+                                <a href="{{ route('jadwal-pengangkutan.view') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-calendar-check"></i> Lihat Jadwal
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-success mt-3">
+                                    <i class="bi bi-person-plus"></i> Sign Up to View
+                                </a>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

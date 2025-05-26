@@ -17,6 +17,7 @@ use App\Http\Controllers\TpsTpaController;
 use App\Http\Controllers\WasteRecordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\JadwalPengangkutanController;
 
 // Halaman utama & dashboard
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -132,6 +133,9 @@ Route::middleware(['auth'])->group(function () {
 
     // fitur pencatatan sampah
     Route::resource('waste-record', WasteRecordController::class);
+
+    // Routes for authenticated users
+    Route::get('/jadwal-pengangkutan/view', [JadwalPengangkutanController::class, 'userView'])->name('jadwal-pengangkutan.view');
 });
 
 // API Routes for waste reports
