@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PickupRequest;
+use APp\Models\TpsTpa;
 use App\Models\CollectionPoint;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -66,6 +67,11 @@ class PickupRequestController extends BaseController
     {
         $pickupRequests = auth()->user()->pickupRequests()->latest()->paginate(10);
         return view('pickups.history', compact('pickupRequests'));
+    }
+
+    public function tpsTpa()
+    {
+        return $this->belongsTo(TpsTpa::class, 'tps_tpa_id');
     }
     public function sampah()
     {
