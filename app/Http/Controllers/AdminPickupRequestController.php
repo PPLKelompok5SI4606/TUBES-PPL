@@ -20,7 +20,7 @@ class AdminPickupRequestController extends Controller
     public function show(PickupRequest $pickupRequest)
     {
         // Get all TPS and TPA locations with capacity info
-        $tpsTpaLocations = TpsTpa::orderBy('name')->get();
+        $tpsTpaLocations = TpsTpa::orderBy('nama')->get();
         
         return view('admin.pickup-requests.show', compact('pickupRequest', 'tpsTpaLocations'));
     }
