@@ -59,4 +59,10 @@ class JadwalPengangkutanController extends Controller
         $jadwal->delete();
         return redirect()->route('jadwal-pengangkutan.index')->with('success', 'Jadwal berhasil dihapus.');
     }
+
+    public function userView()
+    {
+        $jadwals = JadwalPengangkutan::latest()->paginate(10);
+        return view('jadwal-pengangkutan-view', compact('jadwals'));
+    }
 }
