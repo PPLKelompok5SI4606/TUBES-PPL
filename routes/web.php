@@ -16,12 +16,21 @@ use App\Http\Controllers\DelayReportController;
 use App\Http\Controllers\TpsTpaController;
 use App\Http\Controllers\WasteRecordController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\JadwalPengangkutanController;
 
+//dashboard
+// Add after the existing dashboard route
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+// Add this new route for user dashboard
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
+});
+
 // Halaman utama & dashboard
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Artikel & Peta
 Route::get('/articles', [ArticleController::class, 'listArticles']);
@@ -105,11 +114,19 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/laporan/report-delay', [WasteReportController::class, 'laporanReportDelay'])->name('laporan.report-delay');
     Route::put('/laporan/report-delay/{id}', [WasteReportController::class, 'laporanReportDelayUpdate'])->name('laporan.report-delay.update');
 
+    // Add profile route for the "Pengelola" dropdown
     Route::get('/pengelola/profile', [ProfileController::class, 'show'])->name('profile');
 
     Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('waste-collection');
     Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
+    
+    // Officers Routes
+    Route::get('/officers', [OfficerController::class, 'index'])->name('officers.index');
+    Route::post('/officers', [OfficerController::class, 'store'])->name('officers.store');
+    Route::get('/officers/{officer}', [OfficerController::class, 'show'])->name('officers.show');
+    Route::put('/officers/{officer}', [OfficerController::class, 'update'])->name('officers.update');
+    Route::delete('/officers/{officer}', [OfficerController::class, 'destroy'])->name('officers.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -121,15 +138,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
         Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
         Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
-        // Add new route for updating with collection
-        Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])->name('waste-reports.update-with-collection');
-        Route::post('/waste-reports/{wasteReport}/update-with-collection', 
-            [App\Http\Controllers\WasteReportController::class, 'updateWithCollection'])
+
+        // Fix: Keep only one route definition for update-with-collection
+        Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])
             ->name('waste-reports.update-with-collection');
     });
 
     //user dashboard routes - moved inside auth middleware
     Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
     // fitur pencatatan sampah
     Route::resource('waste-record', WasteRecordController::class);
@@ -141,11 +158,11 @@ Route::middleware(['auth'])->group(function () {
 // API Routes for waste reports
 Route::get('/api/waste-reports/{id}', [WasteReportController::class, 'apiGetReport']);
 
+// Delay Reports Routes
 Route::prefix('delay-reports')->group(function () {
     Route::get('/', [DelayReportController::class, 'index'])->name('delay-reports.index');
     Route::get('/create', [DelayReportController::class, 'create'])->name('delay-reports.create');
     Route::post('/', [DelayReportController::class, 'store'])->name('delay-reports.store');
     Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
     Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
-    });
-
+});

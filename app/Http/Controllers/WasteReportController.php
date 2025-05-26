@@ -295,4 +295,9 @@ class WasteReportController extends Controller
         return redirect()->route('laporan.report-delay')
             ->with('success', 'Status laporan berhasil diperbarui!');
     }
+
+    public function reportDelay()
+    {
+        return view('Report_sampah.report-delay');
+    }
 }

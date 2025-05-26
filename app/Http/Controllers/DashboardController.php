@@ -210,4 +210,9 @@ class DashboardController extends Controller
             'rejectedData'
         ));
     }
+
+    public function userDashboard()
+    {
+        return view('dashboard.user');
+    }
 }

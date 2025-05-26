@@ -150,12 +150,29 @@
             
             <div class="form-group">
                 <label for="location">Lokasi Pembuangan</label>
-                <select id="location" name="location" required>
+                <select id="location" name="location" class="form-select" required>
                     <option value="">-- Pilih Lokasi --</option>
-                    
-                    @foreach($tpsPoints as $site)
-                        <option value="{{ $site->nama }}">{{ $site->nama }} ({{ $site->tipe }})</option>
-                    @endforeach
+                    <!-- TPA Options -->
+                    <optgroup label="TPA (Tempat Pembuangan Akhir)">
+                        <option value="TPA Sarimukti">TPA Sarimukti (TPA)</option>
+                        <option value="TPA Jelekong">TPA Jelekong (TPA)</option>
+                    </optgroup>
+                    <!-- TPS Options -->
+                    <optgroup label="TPS (Tempat Pembuangan Sementara)">
+                        <option value="TPS Ciroyom">TPS Ciroyom (TPS)</option>
+                        <option value="TPS Balubur">TPS Balubur (TPS)</option>
+                        <option value="TPS Cicadas">TPS Cicadas (TPS)</option>
+                        <option value="TPS Soekarno-Hatta">TPS Soekarno-Hatta (TPS)</option>
+                        <option value="TPS Cibeunying">TPS Cibeunying (TPS)</option>
+                        <option value="TPS Cijerah">TPS Cijerah (TPS)</option>
+                        <option value="TPS Cibiru">TPS Cibiru (TPS)</option>
+                        <option value="TPS Gedebage">TPS Gedebage (TPS)</option>
+                        <option value="TPS Leuwigajah">TPS Leuwigajah (TPS)</option>
+                        <option value="TPS Pasir Impun">TPS Pasir Impun (TPS)</option>
+                        <option value="TPS 3R Antapani">TPS 3R Antapani (TPS)</option>
+                        <option value="TPS Babakan Sari">TPS Babakan Sari (TPS)</option>
+                        <option value="TPS Terpadu Babakan Sari">TPS Terpadu Babakan Sari (TPS)</option>
+                    </optgroup>
                 </select>
             </div>
 
@@ -248,4 +265,42 @@
         });
     });
 </script>
+
+<!-- Footer Section -->
+<style>
+    .footer {
+        background-color: #28a745;
+        color: white;
+        padding: 1rem 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Add padding to main content to prevent overlap with fixed footer */
+    body {
+        padding-bottom: 60px;
+    }
+</style>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div>
+                <p class="mb-0">Cleansweep Initiative</p>
+                <small>Making our world cleaner, one waste at a time.</small>
+            </div>
+            <div>
+                <small>© {{ date('Y') }} Cleansweep. All rights reserved.</small>
+            </div>
+        </div>
+    </div>
+</footer>
 @endsection
