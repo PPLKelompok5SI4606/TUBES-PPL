@@ -126,6 +126,12 @@ Route::middleware(['auth'])->group(function () {
             [App\Http\Controllers\WasteReportController::class, 'updateWithCollection'])
             ->name('waste-reports.update-with-collection');
     });
+
+    //user dashboard routes - moved inside auth middleware
+    Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+    // fitur pencatatan sampah
+    Route::resource('waste-record', WasteRecordController::class);
 });
 
 // API Routes for waste reports
@@ -138,12 +144,4 @@ Route::prefix('delay-reports')->group(function () {
     Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
     Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
     });
-
-    //user dashboard routes 
-Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
-
-// fitur pencatatan sampah
-Route::middleware(['auth'])->group(function () {
-    Route::resource('waste-record', WasteRecordController::class);
-});
 
