@@ -24,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('pickup_requests', function (Blueprint $table) {
             $table->dropColumn(['jenis_sampah', 'jumlah_sampah']);
+            
         });
     }
 };
