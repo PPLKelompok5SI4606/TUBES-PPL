@@ -69,7 +69,7 @@
                         @if($pickupRequest->tps_tpa_id)
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Target Facility</label>
-                            <p class="mt-1">{{ $pickupRequest->tpsTpa->name }} ({{ $pickupRequest->tpsTpa->type }})</p>
+                            <p class="mt-1">{{ $tpsTpa->nama }} ({{ $tpsTpa->tipe }})</p>
                         </div>
                         @endif
                     </div>
@@ -102,7 +102,7 @@
                                 <option value="">-- Select Facility --</option>
                                 @foreach($tpsTpaLocations as $tpsTpa)
                                     <option value="{{ $tpsTpa->id }}" {{ old('tps_tpa_id', $pickupRequest->tps_tpa_id) == $tpsTpa->id ? 'selected' : '' }}>
-                                        {{ $tpsTpa->name }} ({{ $tpsTpa->type }}) - {{ $tpsTpa->current_capacity }}/{{ $tpsTpa->max_capacity }} m³ used
+                                        {{ $tpsTpa->nama }} ({{ $tpsTpa->tipe }}) - {{ $tpsTpa->kapasitas_terisi }}/{{ $tpsTpa->kapasitas_total }} m³ used
                                     </option>
                                 @endforeach
                             </select>
