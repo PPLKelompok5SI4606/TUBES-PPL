@@ -110,3 +110,40 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::put('/waste-collection/{id}', [WasteCollectionController::class, 'update'])->name('waste-collection.update');
     Route::get('/waste-collection/{id}', [WasteCollectionController::class, 'show'])->name('waste-collection.show');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('waste-reports')->group(function () {
+        Route::get('/', [WasteReportController::class, 'index'])->name('waste-reports.index');
+        Route::get('/create', [WasteReportController::class, 'create'])->name('waste-reports.create');
+        Route::post('/', [WasteReportController::class, 'store'])->name('waste-reports.store');
+        Route::get('/{wasteReport}', [WasteReportController::class, 'show'])->name('waste-reports.show');
+        Route::get('/{wasteReport}/edit', [WasteReportController::class, 'edit'])->name('waste-reports.edit');
+        Route::put('/{wasteReport}', [WasteReportController::class, 'update'])->name('waste-reports.update');
+        Route::delete('/{wasteReport}', [WasteReportController::class, 'destroy'])->name('waste-reports.destroy');
+        // Add new route for updating with collection
+        Route::post('/{wasteReport}/update-with-collection', [WasteReportController::class, 'updateWithCollection'])->name('waste-reports.update-with-collection');
+        Route::post('/waste-reports/{wasteReport}/update-with-collection', 
+            [App\Http\Controllers\WasteReportController::class, 'updateWithCollection'])
+            ->name('waste-reports.update-with-collection');
+    });
+});
+
+// API Routes for waste reports
+Route::get('/api/waste-reports/{id}', [WasteReportController::class, 'apiGetReport']);
+
+Route::prefix('delay-reports')->group(function () {
+    Route::get('/', [DelayReportController::class, 'index'])->name('delay-reports.index');
+    Route::get('/create', [DelayReportController::class, 'create'])->name('delay-reports.create');
+    Route::post('/', [DelayReportController::class, 'store'])->name('delay-reports.store');
+    Route::get('/history', [DelayReportController::class, 'history'])->name('delay-reports.history');
+    Route::get('/{delayReport}', [DelayReportController::class, 'show'])->name('delay-reports.show');
+    });
+
+    //user dashboard routes 
+Route::get('/dashboard-user', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+// fitur pencatatan sampah
+Route::middleware(['auth'])->group(function () {
+    Route::resource('waste-record', WasteRecordController::class);
+});
+
