@@ -66,59 +66,7 @@
 </head>
 <body class="min-h-screen">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="bi bi-house-heart"></i> Cleansweep
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">
-                            <i class="bi bi-house"></i> Home
-                        </a>
-                    </li>
-                    @auth
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('delay-reports.history') }}">
-                                <i class="bi bi-clock-history"></i> History
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="bi bi-box-arrow-right"></i> Logout
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="bi bi-box-arrow-in-right"></i> Login
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="bi bi-person-plus"></i> Register
-                            </a>
-                        </li>
-                    @endauth
-                </ul>
-            </div>
-        </div>
-    </nav>
+    @include('partial.navbar')
 
     <!-- Main Content -->
     <main class="container py-4 content">
@@ -126,31 +74,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-success text-white py-5 mt-auto">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <h3 class="h5 mb-3">About Us</h3>
-                    <p class="mb-0">We're dedicated to keeping our communities clean and environmentally friendly.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3 class="h5 mb-3">Contact</h3>
-                    <p class="mb-0">Email: info@cleansweep.com<br>Phone: (123) 456-7890</p>
-                </div>
-                <div class="col-md-4">
-                    <h3 class="h5 mb-3">Follow Us</h3>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white text-decoration-none hover-opacity">Facebook</a>
-                        <a href="#" class="text-white text-decoration-none hover-opacity">Twitter</a>
-                        <a href="#" class="text-white text-decoration-none hover-opacity">Instagram</a>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-4 pt-4 border-top border-light text-center">
-                <p class="mb-0">&copy; {{ date('Y') }} Clean Homes Initiative. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    @include('partial.footeruser')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')

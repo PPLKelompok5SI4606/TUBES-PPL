@@ -19,6 +19,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\JadwalPengangkutanController;
+use App\Http\Controllers\WasteTransferController;
 
 //dashboard
 // Add after the existing dashboard route
@@ -127,6 +128,9 @@ Route::middleware('checkRole:pengelola')->group(function () {
     Route::get('/officers/{officer}', [OfficerController::class, 'show'])->name('officers.show');
     Route::put('/officers/{officer}', [OfficerController::class, 'update'])->name('officers.update');
     Route::delete('/officers/{officer}', [OfficerController::class, 'destroy'])->name('officers.destroy');
+
+    Route::get('/transfer-sampah', [WasteTransferController::class, 'index'])->name('waste-transfer.index');
+    Route::post('/transfer-sampah', [WasteTransferController::class, 'store'])->name('waste-transfer.store');
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -32,6 +32,9 @@
         .navbar-brand:hover {
             color: rgba(255, 255, 255, 0.8);
         }
+        .auth-buttons {
+            margin-left: auto;
+        }
     </style>
     @stack('styles')
 </head>
@@ -44,13 +47,12 @@
                     <a class="navbar-brand me-4" href="{{ route('home') }}">CleanSweep</a>
                     
                     <div class="d-none d-md-flex">
-                        <!-- In the navbar section, add this link after the Report Delay link -->
-                        <div class="d-none d-md-flex">
-                            <a class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}" href="{{ route('laporan') }}">Laporan</a>
-                            <a class="nav-link {{ request()->routeIs('waste-collection') ? 'active' : '' }}" href="{{ route('waste-collection') }}">Clean Collection</a>
-                            <a class="nav-link {{ request()->routeIs('laporan.report-delay') ? 'active' : '' }}" href="{{ route('laporan.report-delay') }}">Report Delay</a>
-                            <a class="nav-link {{ request()->routeIs('officers.index') ? 'active' : '' }}" href="{{ route('officers.index') }}">Officers</a>
-                        </div>
+                        <a class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}" href="{{ route('laporan') }}">Laporan</a>
+                        <a class="nav-link {{ request()->routeIs('waste-collection') ? 'active' : '' }}" href="{{ route('waste-collection') }}">Clean Collection</a>
+                        <a class="nav-link {{ request()->routeIs('laporan.report-delay') ? 'active' : '' }}" href="{{ route('laporan.report-delay') }}">Report Delay</a>
+                        <a class="nav-link {{ request()->routeIs('officers.index') ? 'active' : '' }}" href="{{ route('officers.index') }}">Officers</a>
+                        <a class="nav-link {{ request()->routeIs('waste-transfer.index') ? 'active' : '' }}" href="{{ route('waste-transfer.index') }}">Transfer Sampah</a>
+                    </div>
                 </div>
                 
                 <div class="auth-buttons">
@@ -83,6 +85,7 @@
                     <a class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}" href="{{ route('laporan') }}">Laporan</a>
                     <a class="nav-link {{ request()->routeIs('waste-collection') ? 'active' : '' }}" href="{{ route('waste-collection') }}">Clean Collection</a>
                     <a class="nav-link {{ request()->routeIs('laporan.report-delay') ? 'active' : '' }}" href="{{ route('laporan.report-delay') }}">Report Delay</a>
+                    <a class="nav-link {{ request()->routeIs('waste-transfer.index') ? 'active' : '' }}" href="{{ route('waste-transfer.index') }}">Transfer</a>
                 </div>
             </div>
         </div>

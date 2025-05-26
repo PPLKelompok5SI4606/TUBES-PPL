@@ -111,10 +111,9 @@
     }
   </style>
 </head>
-
+@include('partial.navbar')
 <body>
   <!-- Navbar -->
-  @include('partial.navbar')
 
   <!-- Content -->
   <div class="container py-5">
@@ -164,6 +163,8 @@
       @endforelse
     </div>
   </div>
+
+  @include('partial.footeruser')
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

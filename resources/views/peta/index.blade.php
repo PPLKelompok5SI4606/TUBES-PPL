@@ -64,63 +64,7 @@
     </style>
 </head>
 <body>
-    <!-- Custom navbar matching the home page -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4CAF50;">
-        <div class="container">
-            <a class="navbar-brand" href="/">CleanSweep</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/articles">Articles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('waste-record.index') }}">Waste Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('delay-reports.index') }}">Delay Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                </ul>
-                <div class="d-flex gap-2">
-                    @auth
-                        <a href="{{ route('pickup.create') }}" class="btn btn-light me-2">
-                            <i class="bi bi-truck"></i> Request Pickup
-                        </a>
-                        <div class="dropdown">
-                            <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ route('pickup.index') }}">My Pickups</a></li>
-                                <li><a class="dropdown-item" href="{{ route('waste-record.index') }}">My Waste Reports</a></li>
-                                <li><a class="dropdown-item" href="{{ route('delay-reports.index') }}">My Delay Reports</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('auth.user.logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-light">Sign In</a>
-                        <a href="{{ route('register') }}" class="btn btn-light">Sign Up</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('partial.navbar')
 
     <div class="container my-4">
         <div class="row">

@@ -71,12 +71,21 @@
     </div>
 
     <!-- Daily Waste Processed -->
+    <!-- Daily Waste Processed -->
     <div class="transition-transform transform hover:scale-105 border-l-4 bg-teal-50 border-teal-500 text-teal-600 px-6 py-8 flex items-center justify-between shadow-lg bg-white rounded-xl hover:shadow-2xl">
         <div class="flex flex-col">
             <p class="font-poppins font-medium text-teal-600 text-lg">Daily Waste Processed</p>
-            <p class="font-poppins font-light text-gray-700 text-xl">-</p>
-            <p class="font-poppins font-light text-gray-500 text-xs mt-1">Data not available yet</p>
+            <p class="font-poppins font-light text-gray-700 text-xl">
+                {{ $todayTransfers }} m³
+            </p>
+            <p class="font-poppins font-light text-gray-500 text-xs mt-1">
+                {{ $todayTransferCount }} transfer{{ $todayTransferCount != 1 ? 's' : '' }} today
+            </p>
         </div>
+        <svg class="w-12 h-12 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M9 16.17l-3.88-3.88L4 13.41l5 5 9-9-1.41-1.42z"></path>
+        </svg>
+    </div>
         <svg class="w-12 h-12 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
             <path d="M9 16.17l-3.88-3.88L4 13.41l5 5 9-9-1.41-1.42z"></path>
         </svg>
