@@ -21,8 +21,12 @@ class AdminPickupRequestController extends Controller
     {
         // Get all TPS and TPA locations with capacity info
         $tpsTpaLocations = TpsTpa::orderBy('nama')->get();
-        
-        return view('admin.pickup-requests.show', compact('pickupRequest', 'tpsTpaLocations'));
+        $tpsTpa = null;
+        if ($pickupRequest->tps_tpa_id) {
+            $tpsTpa = TpsTpa::find($pickupRequest->tps_tpa_id);
+        }
+    
+        return view('admin.pickup-requests.show', compact('pickupRequest', 'tpsTpaLocations', 'tpsTpa'));
     }
 
     public function update(Request $request, PickupRequest $pickupRequest)
@@ -30,7 +34,7 @@ class AdminPickupRequestController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:pending,accepted,rejected,completed',
             'admin_notes' => 'nullable|string',
-            'tps_tpa_id' => 'nullable|exists:tps_tpa,id',  // Use tps_tpa table
+            'tps_tpa_id' => 'nullable|exists:tps_tpa,id', 
             'waste_volume' => 'nullable|numeric|min:0',
         ]);
         
