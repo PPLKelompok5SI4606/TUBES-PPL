@@ -1,213 +1,91 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
-use App\Models\Article;
 use App\Models\User;
+use App\Models\TpsTpa;
 use App\Models\PickupRequest;
-use App\Models\DelayReport;
-use App\Models\WasteReport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        try {
-            $articles = Article::all();
-            $pickupRequests = PickupRequest::all();
-            $users = User::all();
+        // Count user types
+        $userCount = User::where('role', 'user')->count();
+        $adminCount = User::where('role', 'admin')->count();
+        $pengelolaCount = User::where('role', 'pengelola')->count();
+        
+        // Calculate TPS capacity
+        $tpsData = TpsTpa::where('tipe', 'TPS')->get();
+        $tpsCapacityTotal = $tpsData->sum('kapasitas_total');
+        $tpsCapacityUsed = $tpsData->sum('kapasitas_terisi');
+        $tpsCapacityAvailable = $tpsCapacityTotal - $tpsCapacityUsed;
+        
+        // Calculate TPA capacity
+        $tpaData = TpsTpa::where('tipe', 'TPA')->get();
+        $tpaCapacityTotal = $tpaData->sum('kapasitas_total');
+        $tpaCapacityUsed = $tpaData->sum('kapasitas_terisi');
+        $tpaCapacityAvailable = $tpaCapacityTotal - $tpaCapacityUsed;
+        
+        // Calculate daily waste input and processed
+        $today = Carbon::today();
+        // Get pickup waste data for today
+        $pickupWasteInput = PickupRequest::whereDate('created_at', $today)
+            ->where('status', 'completed')
+            ->sum(DB::raw('jumlah_sampah * 0.1')); // Assuming each bag is 0.1 m³
+        
+        // Get waste report data for today
+        $reportWasteInput = \App\Models\WasteCollection::whereDate('collection_date', $today)
+            ->sum(DB::raw('amount_kg / 350')); // Convert kg to m³
+        
+        // Combine both sources
+        $dailyWasteInput = $pickupWasteInput + $reportWasteInput;
+        
+        $dailyWasteProcessed = $dailyWasteInput * 0.8; // Assuming 80% of waste is processed daily
+        
+        // Get data for daily chart (last 7 days)
+        $lastWeek = Carbon::today()->subDays(6);
+        $dailyDates = [];
+        $dailyInputData = [];
+        $dailyProcessedData = [];   
+        
+        for ($i = 0; $i < 7; $i++) {
+            $date = Carbon::parse($lastWeek)->addDays($i);
+            $dailyDates[] = $date->format('M d');
 
-            // Hitung Users
-            $userCount = User::where('role', 'user')->count();
-            $adminCount = User::where('role', 'admin')->count();
-            $pengelolaCount = User::where('role', 'pengelola')->count();
+            // Get pickup waste data
+            $pickupInput = PickupRequest::whereDate('created_at', $date)
+                ->where('status', 'completed')
+                ->sum(DB::raw('jumlah_sampah * 0.1'));
 
-            // Hitung Articles
-            $publishedArticles = Article::where('status', 'published')->count();
-            $unpublishedArticles = Article::where('status', 'draft')->count();
+            // Get waste report data
+            $reportInput = \App\Models\WasteCollection::whereDate('collection_date', $date)
+                ->sum(DB::raw('amount_kg / 350')); // Convert kg to m³
 
-            // Hitung Pickup Sampah
-            $jumlahSampahTPS = PickupRequest::where('jenis_sampah', 'TPS')->count();
-            $jumlahSampahTPA = PickupRequest::where('jenis_sampah', 'TPA')->count();
-
-            // Total Pickup Request (Semua Sampah)
-            $totalPickupRequest = PickupRequest::count();
-
-            // Pickup Request by Status
-            $completedPickup = PickupRequest::where('status', 'completed')->count();
-            $rejectedPickup = PickupRequest::where('status', 'rejected')->count();
-            $acceptedPickup = PickupRequest::where('status', 'accepted')->count();
-            $pendingPickup = PickupRequest::where('status', 'pending')->count();
-
-            // Delay Reports Statistics
-            $totalDelayReports = DelayReport::count();
-            $pendingDelayReports = DelayReport::where('status', 'pending')->count();
-            $inProgressDelayReports = DelayReport::where('status', 'in_progress')->count();
-            $resolvedDelayReports = DelayReport::where('status', 'resolved')->count();
-
-            // Prepare data untuk grafik
-            $months = [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December'
-            ];
-
-            $dataTPS = [];
-            $dataTPA = [];
-
-            foreach (range(1, 12) as $month) {
-                // Jumlah pickup TPS per bulan
-                $tps = PickupRequest::where('jenis_sampah', 'TPS')
-                    ->whereMonth('created_at', $month)
-                    ->count();
-
-                // Jumlah pickup TPA per bulan
-                $tpa = PickupRequest::where('jenis_sampah', 'TPA')
-                    ->whereMonth('created_at', $month)
-                    ->count();
-
-                $dataTPS[] = $tps;
-                $dataTPA[] = $tpa;
-            }
-
-            // --- NEW --- Chart Status Data per Bulan
-            $statusPending = [];
-            $statusAccepted = [];
-            $statusRejected = [];
-            $statusCompleted = [];
-
-            foreach (range(1, 12) as $month) {
-                $pending = PickupRequest::where('status', 'pending')
-                    ->whereMonth('created_at', $month)
-                    ->count();
-
-                $accepted = PickupRequest::where('status', 'accepted')
-                    ->whereMonth('created_at', $month)
-                    ->count();
-
-                $rejected = PickupRequest::where('status', 'rejected')
-                    ->whereMonth('created_at', $month)
-                    ->count();
-
-                $completed = PickupRequest::where('status', 'completed')
-                    ->whereMonth('created_at', $month)
-                    ->count();
-
-                $statusPending[] = $pending;
-                $statusAccepted[] = $accepted;
-                $statusRejected[] = $rejected;
-                $statusCompleted[] = $completed;
-            }
-
-            $totalWasteReports = WasteReport::count();
-            $pendingWasteReports = WasteReport::where('status', 'pending')->count();
-            $inProgressWasteReports = WasteReport::where('status', 'in_progress')->count();
-            $resolvedWasteReports = WasteReport::where('status', 'resolved')->count();
-            $rejectedWasteReports = WasteReport::where('status', 'rejected')->count();
-
-            $pendingData = [];
-            $inProgressData = [];
-            $resolvedData = [];
-            $rejectedData = [];
-            foreach (range(1, 12) as $month) {
-                $pendingData[] = WasteReport::where('status', 'pending')->whereMonth('created_at', $month)->count();
-                $inProgressData[] = WasteReport::where('status', 'in_progress')->whereMonth('created_at', $month)->count();
-                $resolvedData[] = WasteReport::where('status', 'resolved')->whereMonth('created_at', $month)->count();
-                $rejectedData[] = WasteReport::where('status', 'rejected')->whereMonth('created_at', $month)->count();
-            }
-
-            return view('dashboard.index', compact(
-                'articles',
-                'pickupRequests',
-                'users',
-                'userCount',
-                'adminCount',
-                'pengelolaCount',
-                'publishedArticles',
-                'unpublishedArticles',
-                'jumlahSampahTPS',
-                'jumlahSampahTPA',
-                'totalPickupRequest',
-                'completedPickup',
-                'rejectedPickup',
-                'acceptedPickup',
-                'pendingPickup',
-                'months',
-                'dataTPS',
-                'dataTPA',
-                'statusPending',
-                'statusAccepted',
-                'statusRejected',
-                'statusCompleted',
-                'totalDelayReports',
-                'pendingDelayReports',
-                'inProgressDelayReports',
-                'resolvedDelayReports',
-                'totalWasteReports',
-                'pendingWasteReports',
-                'inProgressWasteReports',
-                'resolvedWasteReports',
-                'rejectedWasteReports',
-                'pendingData',
-                'inProgressData',
-                'resolvedData',
-                'rejectedData'
-            ));
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-            return redirect()->back()->with('error', 'Failed to load dashboard.');
+            // Combine both sources
+            $totalInput = $pickupInput + $reportInput;
+        
+            $dailyInputData[] = $totalInput;
+            $dailyProcessedData[] = $totalInput * 0.8; // Assuming 80% processing rate
         }
-    }
-
-    public function wasteReportDashboard()
-    {
-        // Statistik
-        $totalWasteReports = WasteReport::count();
-        $pendingWasteReports = WasteReport::where('status', 'pending')->count();
-        $inProgressWasteReports = WasteReport::where('status', 'in_progress')->count();
-        $resolvedWasteReports = WasteReport::where('status', 'resolved')->count();
-        $rejectedWasteReports = WasteReport::where('status', 'rejected')->count();
-
-        // Data chart per bulan
-        $months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        $pendingData = [];
-        $inProgressData = [];
-        $resolvedData = [];
-        $rejectedData = [];
-
-        foreach (range(1, 12) as $month) {
-            $pendingData[] = WasteReport::where('status', 'pending')->whereMonth('created_at', $month)->count();
-            $inProgressData[] = WasteReport::where('status', 'in_progress')->whereMonth('created_at', $month)->count();
-            $resolvedData[] = WasteReport::where('status', 'resolved')->whereMonth('created_at', $month)->count();
-            $rejectedData[] = WasteReport::where('status', 'rejected')->whereMonth('created_at', $month)->count();
-        }
-
-        return view('dashboard.waste-report', compact(
-            'totalWasteReports',
-            'pendingWasteReports',
-            'inProgressWasteReports',
-            'resolvedWasteReports',
-            'rejectedWasteReports',
-            'months',
-            'pendingData',
-            'inProgressData',
-            'resolvedData',
-            'rejectedData'
+            
+        return view('dashboard.index', compact(
+            'userCount', 
+            'adminCount', 
+            'pengelolaCount',
+            'tpsCapacityUsed',
+            'tpsCapacityAvailable',
+            'tpaCapacityUsed',
+            'tpaCapacityAvailable',
+            'dailyWasteInput',
+            'dailyWasteProcessed',
+            'dailyDates',
+            'dailyInputData',
+            'dailyProcessedData'
         ));
     }
 
