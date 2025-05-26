@@ -20,26 +20,100 @@
             flex: 1;
         }
         .hero-section {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                               url('{{ asset('images/cleanup-bg.jpg') }}');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 100px 0;
+            padding: 120px 0;
+            position: relative;
+        }
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, white);
         }
         .btn-success {
             background-color: #4CAF50;
             border-color: #4CAF50;
+            transition: all 0.3s ease;
         }
         .btn-success:hover {
             background-color: #45a049;
             border-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .bg-success {
             background-color: #4CAF50 !important;
         }
         .text-success {
             color: #4CAF50 !important;
+        }
+        .schedule-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .schedule-card:hover {
+            transform: translateY(-5px);
+        }
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            padding: 15px;
+        }
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+        .table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .pagination {
+            margin-top: 2rem;
+        }
+        .pagination .page-link {
+            color: #4CAF50;
+            border: 1px solid #dee2e6;
+            margin: 0 2px;
+            border-radius: 5px;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        .empty-state {
+            padding: 3rem 0;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #4CAF50;
         }
     </style>
 </head>
@@ -48,23 +122,36 @@
 
     <section class="hero-section">
         <div class="container">
-            <h1 class="display-4 fw-bold mb-4">Jadwal Pengangkutan</h1>
-            <p class="lead">Lihat jadwal pengangkutan sampah yang telah dijadwalkan untuk area Anda.</p>
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">Jadwal Pengangkutan</h1>
+                    <p class="lead mb-0">Lihat jadwal pengangkutan sampah yang telah dijadwalkan untuk area Anda.</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <div class="container py-5">
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h3 class="card-title mb-0">Daftar Jadwal Pengangkutan</h3>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-box">
+                    <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Informasi Jadwal</h5>
+                    <p class="mb-0">Jadwal pengangkutan sampah diurutkan berdasarkan tanggal terbaru. Pastikan untuk memeriksa jadwal secara berkala untuk informasi terbaru.</p>
+                </div>
+
+                <div class="card schedule-card">
+                    <div class="card-header bg-success text-white py-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar-check me-2"></i>
+                            <h3 class="card-title mb-0">Daftar Jadwal Pengangkutan</h3>
+                        </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         @if($jadwals->isEmpty())
-                            <div class="text-center py-4">
-                                <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
-                                <p class="mt-3 text-muted">Belum ada jadwal pengangkutan yang tersedia.</p>
+                            <div class="empty-state text-center">
+                                <i class="bi bi-calendar-x"></i>
+                                <h4 class="text-muted mt-3">Belum ada jadwal pengangkutan</h4>
+                                <p class="text-muted">Saat ini belum ada jadwal pengangkutan yang tersedia. Silakan periksa kembali nanti.</p>
                             </div>
                         @else
                             <div class="table-responsive">
@@ -82,12 +169,41 @@
                                     <tbody>
                                         @foreach($jadwals as $jadwal)
                                             <tr>
-                                                <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') }}</td>
-                                                <td>{{ $jadwal->waktu }}</td>
-                                                <td>{{ $jadwal->lokasi }}</td>
-                                                <td>{{ $jadwal->nama_petugas }}</td>
-                                                <td>{{ $jadwal->no_kontak }}</td>
-                                                <td>{{ $jadwal->keterangan ?? '-' }}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-calendar-date text-success me-2"></i>
+                                                        {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-clock text-success me-2"></i>
+                                                        {{ $jadwal->waktu }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-geo-alt text-success me-2"></i>
+                                                        {{ $jadwal->lokasi }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-person text-success me-2"></i>
+                                                        {{ $jadwal->nama_petugas }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-telephone text-success me-2"></i>
+                                                        {{ $jadwal->no_kontak }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-light text-dark">
+                                                        {{ $jadwal->keterangan ?? '-' }}
+                                                    </span>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
