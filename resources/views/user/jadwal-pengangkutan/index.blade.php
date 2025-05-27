@@ -120,7 +120,7 @@
 <body class="min-h-screen">
     @include('partial.navbar')
 
-    <section class="hero-section">
+    <section class="hero-section" style="background-image: url('{{ asset('images/pickup.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
